@@ -1,447 +1,326 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Combate da Química</title>
+    <title>Combate da Química</title>
 
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body {
-    background:
-        radial-gradient(circle at center, rgba(65, 20, 80, 0.25), transparent 45%),
-        linear-gradient(135deg, #080808, #151515 50%, #050505);
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
 
-/* FUNDO */
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background:
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 80px,
-            rgba(255,255,255,0.015) 81px
-        );
-}
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-/* TELA PRINCIPAL */
-.menu {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 35px 20px 25px;
-}
+        /* ÁREA PRINCIPAL DO JOGO */
+        .game-screen {
+            position: relative;
 
-/* TÍTULO */
-.logo {
-    text-align: center;
-    margin-bottom: 10px;
-}
+            width: 100vw;
+            height: 100vh;
 
-.logo h1 {
-    font-size: clamp(38px, 7vw, 82px);
-    font-weight: 900;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: #e6d5a3;
-    text-shadow:
-        0 0 8px #000,
-        4px 4px 0 #351f0c,
-        0 0 25px rgba(255, 150, 30, 0.35);
-}
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-.logo p {
-    color: #e2a43b;
-    letter-spacing: 7px;
-    font-size: clamp(12px, 2vw, 20px);
-    font-weight: bold;
-}
+            background: #000;
+        }
 
-/* SUBTÍTULO */
-.intro {
-    text-align: center;
-    max-width: 750px;
-    margin: 20px auto 30px;
-    color: #aaa;
-    line-height: 1.6;
-}
+        /* IMAGEM DO MENU */
+        .menu-image {
+            width: 100%;
+            height: 100%;
 
-/* MENU */
-.menu-box {
-    width: min(900px, 100%);
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-}
+            object-fit: contain;
 
-.menu-button {
-    position: relative;
-    border: 2px solid #6e5528;
-    background:
-        linear-gradient(145deg, rgba(55,55,55,0.95), rgba(15,15,15,0.95));
-    color: #eee;
-    padding: 20px;
-    min-height: 72px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: 0.2s;
-    box-shadow:
-        inset 0 0 15px rgba(255,255,255,0.03),
-        0 5px 20px rgba(0,0,0,0.5);
-}
+            display: block;
 
-.menu-button:hover {
-    transform: scale(1.025);
-    border-color: #e0a936;
-    box-shadow:
-        0 0 18px rgba(224,169,54,0.35),
-        inset 0 0 20px rgba(224,169,54,0.08);
-}
+            user-select: none;
+            -webkit-user-drag: none;
+        }
 
-.menu-button span {
-    display: block;
-    font-size: 11px;
-    color: #888;
-    margin-top: 6px;
-    letter-spacing: 1px;
-}
+        /*
+        ÁREAS INVISÍVEIS DE CLIQUE
 
-/* CORES DOS BOTÕES */
-.player1 {
-    border-color: #b66b20;
-}
+        Elas ficam sobre a imagem.
+        Mais tarde vamos ligar cada uma delas
+        às telas reais do jogo.
+        */
 
-.player2 {
-    border-color: #287da5;
-}
+        .menu-button {
+            position: absolute;
 
-.training {
-    border-color: #789b35;
-}
+            border: none;
+            background: transparent;
 
-.questions {
-    border-color: #9143a5;
-}
+            cursor: pointer;
 
-.chemistry {
-    border-color: #c69a25;
-}
+            z-index: 10;
+        }
 
-.options {
-    border-color: #777;
-}
+        /*
+        Menu lateral da arte.
 
-.credits {
-    border-color: #9c792e;
-}
+        As posições estão em porcentagem para
+        funcionar também em telas diferentes.
+        */
 
-.exit {
-    border-color: #8b2929;
-}
+        .btn-player1 {
+            left: 8%;
+            bottom: 20%;
+            width: 14%;
+            height: 5%;
+        }
 
-/* CLASSES */
-.classes {
-    width: min(900px, 100%);
-    margin-top: 35px;
-    padding: 20px;
-    border: 1px solid #493b25;
-    background: rgba(0,0,0,0.5);
-}
+        .btn-player2 {
+            left: 8%;
+            bottom: 14.5%;
+            width: 14%;
+            height: 5%;
+        }
 
-.classes h2 {
-    text-align: center;
-    color: #d6b56c;
-    font-size: 16px;
-    letter-spacing: 3px;
-    margin-bottom: 18px;
-}
+        .btn-training {
+            left: 8%;
+            bottom: 9%;
+            width: 14%;
+            height: 5%;
+        }
 
-.class-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-}
+        .btn-options {
+            left: 8%;
+            bottom: 3.5%;
+            width: 14%;
+            height: 5%;
+        }
 
-.class-card {
-    text-align: center;
-    padding: 14px 8px;
-    border: 1px solid #333;
-    background: rgba(255,255,255,0.025);
-}
+        /*
+        Efeito visual ao passar o mouse.
 
-.class-card strong {
-    display: block;
-    margin-bottom: 5px;
-}
+        Como o botão é transparente, ele só cria
+        um pequeno brilho para sabermos onde clicar.
+        */
 
-.class-card small {
-    color: #999;
-    font-size: 11px;
-}
+        .menu-button:hover {
+            background: rgba(255, 190, 60, 0.08);
 
-.organo-cloro strong {
-    color: #91d63a;
-}
+            box-shadow:
+                0 0 15px rgba(255, 190, 60, 0.25);
 
-.organo-fosforo strong {
-    color: #e8b72c;
-}
+            border-radius: 4px;
+        }
 
-.carbamato strong {
-    color: #e35a43;
-}
+        /* JANELA DE AVISO */
 
-.piretroide strong {
-    color: #b36cff;
-}
+        .modal {
+            position: fixed;
 
-/* RODAPÉ */
-.footer {
-    margin-top: 30px;
-    color: #666;
-    font-size: 12px;
-    text-align: center;
-    letter-spacing: 1px;
-}
+            inset: 0;
 
-/* JANELA */
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.82);
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    z-index: 100;
-}
+            display: none;
 
-.modal.active {
-    display: flex;
-}
+            justify-content: center;
+            align-items: center;
 
-.modal-box {
-    width: min(650px, 100%);
-    background:
-        linear-gradient(145deg, #191919, #090909);
-    border: 2px solid #b58935;
-    padding: 35px;
-    text-align: center;
-    box-shadow: 0 0 40px rgba(0,0,0,0.8);
-}
+            background: rgba(0, 0, 0, 0.85);
 
-.modal-box h2 {
-    color: #e1bd66;
-    margin-bottom: 15px;
-}
+            z-index: 100;
+        }
 
-.modal-box p {
-    color: #bbb;
-    line-height: 1.6;
-    margin-bottom: 25px;
-}
+        .modal.active {
+            display: flex;
+        }
 
-.close {
-    background: #8c2929;
-    border: none;
-    color: white;
-    padding: 12px 25px;
-    cursor: pointer;
-    font-weight: bold;
-}
+        .modal-box {
+            width: min(500px, 90%);
 
-/* RESPONSIVO */
-@media (max-width: 700px) {
+            padding: 35px;
 
-    .menu-box {
-        grid-template-columns: 1fr;
-    }
+            text-align: center;
 
-    .class-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+            background:
+                linear-gradient(
+                    145deg,
+                    #1b1b1b,
+                    #080808
+                );
 
-    .logo h1 {
-        letter-spacing: 2px;
-    }
-}
-</style>
+            border: 2px solid #c2943e;
+
+            box-shadow:
+                0 0 35px rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-box h2 {
+            margin-bottom: 15px;
+
+            color: #e4bd65;
+
+            font-size: 28px;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+        }
+
+        .modal-box p {
+            color: #ccc;
+
+            line-height: 1.6;
+
+            margin-bottom: 25px;
+        }
+
+        .close-button {
+            border: none;
+
+            padding: 12px 30px;
+
+            background: #8d2929;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .close-button:hover {
+            background: #b43737;
+
+            transform: scale(1.05);
+        }
+
+        /*
+        RESPONSIVIDADE
+
+        Em celulares/tablets a imagem continua
+        ocupando toda a tela sem deformar.
+        */
+
+        @media (max-width: 700px) {
+
+            .menu-button {
+                /*
+                Mantém as áreas clicáveis
+                proporcionais à imagem.
+                */
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<main class="menu">
+    <main class="game-screen">
 
-    <section class="logo">
-        <h1>Combate da Química</h1>
-        <p>ESCOLHA SEU DESTINO</p>
-    </section>
+        <!-- SUA IMAGEM DO MENU -->
 
-    <p class="intro">
-        Um jogo de luta onde a Química Orgânica encontra o combate.
-        Conheça as estruturas, propriedades e efeitos dos agrotóxicos
-        enquanto enfrenta seus adversários.
-    </p>
+        <img
+            src="imagem_menu.jfif"
+            alt="Menu do Combate da Química"
+            class="menu-image"
+        >
 
-    <section class="menu-box">
 
-        <button class="menu-button player1"
-                onclick="abrirModal('1 JOGADOR')">
-            ⚔️ 1 JOGADOR
-            <span>Enfrente os lutadores controlados pelo jogo</span>
+        <!-- BOTÕES INVISÍVEIS SOBRE A ARTE -->
+
+        <button
+            class="menu-button btn-player1"
+            onclick="abrirMenu('1 JOGADOR')"
+            aria-label="1 Jogador">
         </button>
 
-        <button class="menu-button player2"
-                onclick="abrirModal('2 JOGADORES')">
-            ⚔️ 2 JOGADORES
-            <span>Desafie um colega em uma batalha química</span>
+        <button
+            class="menu-button btn-player2"
+            onclick="abrirMenu('2 JOGADORES')"
+            aria-label="2 Jogadores">
         </button>
 
-        <button class="menu-button training"
-                onclick="abrirModal('TREINAMENTO')">
-            🎯 TREINAMENTO
-            <span>Aprenda os golpes e poderes dos lutadores</span>
+        <button
+            class="menu-button btn-training"
+            onclick="abrirMenu('TREINAMENTO')"
+            aria-label="Treinamento">
         </button>
 
-        <button class="menu-button questions"
-                onclick="abrirModal('PERGUNTAS')">
-            🧪 PERGUNTAS
-            <span>Teste seus conhecimentos de Química</span>
+        <button
+            class="menu-button btn-options"
+            onclick="abrirMenu('OPÇÕES')"
+            aria-label="Opções">
         </button>
 
-        <button class="menu-button chemistry"
-                onclick="abrirModal('QUÍMICA ORGÂNICA')">
-            ⚗️ QUÍMICA ORGÂNICA
-            <span>Descubra a ciência por trás dos lutadores</span>
-        </button>
+    </main>
 
-        <button class="menu-button options"
-                onclick="abrirModal('OPÇÕES')">
-            ⚙️ OPÇÕES
-            <span>Configurações do jogo</span>
-        </button>
 
-        <button class="menu-button credits"
-                onclick="abrirModal('CRÉDITOS')">
-            ★ CRÉDITOS
-            <span>Equipe responsável pelo projeto</span>
-        </button>
+    <!-- JANELA QUE APARECE AO CLICAR -->
 
-        <button class="menu-button exit"
-                onclick="sairDoJogo()">
-            🚪 SAIR
-            <span>Encerrar o jogo</span>
-        </button>
+    <div
+        class="modal"
+        id="modal">
 
-    </section>
+        <div class="modal-box">
 
-    <section class="classes">
+            <h2 id="modal-title">
+                Combate da Química
+            </h2>
 
-        <h2>CLASSES QUÍMICAS</h2>
+            <p id="modal-text">
+                Carregando...
+            </p>
 
-        <div class="class-grid">
+            <button
+                class="close-button"
+                onclick="fecharMenu()">
 
-            <div class="class-card organo-cloro">
-                <strong>🧬 ORGANOCLORADOS</strong>
-                <small>Cloro • Persistência • Bioacumulação</small>
-            </div>
+                VOLTAR
 
-            <div class="class-card organo-fosforo">
-                <strong>⚡ ORGANOFOSFORADOS</strong>
-                <small>Fósforo • Sistema nervoso</small>
-            </div>
-
-            <div class="class-card carbamato">
-                <strong>🔥 CARBAMATOS</strong>
-                <small>Grupo carbamato • Inibição reversível</small>
-            </div>
-
-            <div class="class-card piretroide">
-                <strong>⚡ PIRETRÓIDES</strong>
-                <small>Na⁺ • Canais de sódio • Velocidade</small>
-            </div>
+            </button>
 
         </div>
 
-    </section>
-
-    <footer class="footer">
-        CONHECIMENTO É SUA MAIOR ARMA • COMBATE DA QUÍMICA
-    </footer>
-
-</main>
-
-
-<!-- JANELA DOS BOTÕES -->
-
-<div class="modal" id="modal">
-
-    <div class="modal-box">
-
-        <h2 id="modalTitle">Combate da Química</h2>
-
-        <p id="modalText">
-            Este módulo será desenvolvido na próxima etapa.
-        </p>
-
-        <button class="close" onclick="fecharModal()">
-            VOLTAR
-        </button>
-
     </div>
 
-</div>
+
+    <script>
+
+        function abrirMenu(opcao) {
+
+            document.getElementById("modal-title")
+                .textContent = opcao;
+
+            document.getElementById("modal-text")
+                .textContent =
+                "Essa parte do Combate da Química será desenvolvida agora. Em breve você poderá escolher personagens, arenas e iniciar a batalha.";
+
+            document.getElementById("modal")
+                .classList.add("active");
+        }
 
 
-<script>
+        function fecharMenu() {
 
-function abrirModal(titulo) {
+            document.getElementById("modal")
+                .classList.remove("active");
+        }
 
-    document.getElementById("modalTitle").textContent = titulo;
-
-    document.getElementById("modalText").textContent =
-        "Este módulo será desenvolvido na próxima etapa do jogo. " +
-        "Em breve você poderá escolher personagens, arenas, " +
-        "responder perguntas e participar das batalhas.";
-
-    document.getElementById("modal").classList.add("active");
-}
-
-function fecharModal() {
-
-    document.getElementById("modal").classList.remove("active");
-
-}
-
-function sairDoJogo() {
-
-    document.getElementById("modalTitle").textContent = "SAIR";
-
-    document.getElementById("modalText").textContent =
-        "Obrigado por jogar Combate da Química!";
-
-    document.getElementById("modal").classList.add("active");
-}
-
-</script>
+    </script>
 
 </body>
 </html>
