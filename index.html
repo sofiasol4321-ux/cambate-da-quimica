@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Combate da Química</title>
 
 <style>
+
+/* =====================================================
+   CONFIGURAÇÕES GERAIS
+===================================================== */
 
 *{
     box-sizing:border-box;
@@ -14,7 +24,8 @@
     padding:0;
 }
 
-html,body{
+html,
+body{
     width:100%;
     height:100%;
     overflow:hidden;
@@ -36,9 +47,10 @@ body{
     background:#000 center/cover no-repeat;
 }
 
-/* =========================
+
+/* =====================================================
    TELAS
-========================= */
+===================================================== */
 
 .screen{
     position:absolute;
@@ -50,39 +62,53 @@ body{
     display:block;
 }
 
-/* =========================
+
+/* =====================================================
    MENU
-========================= */
+===================================================== */
 
 #menu{
-    background:url("WhatsApp Image 2026-08-30 at 16.00.20.jpeg") center/cover no-repeat;
+    background:
+        url("WhatsApp Image 2026-08-30 at 16.00.20.jpeg")
+        center/cover no-repeat;
 }
 
 .menu-buttons{
+
     position:absolute;
+
     left:50%;
     bottom:7%;
+
     transform:translateX(-50%);
 
     display:flex;
+
     gap:10px;
+
     flex-wrap:wrap;
+
     justify-content:center;
 
     width:92%;
+
     z-index:5;
 }
 
 .menu-btn{
+
     padding:12px 18px;
 
     border:2px solid rgba(255,255,255,.8);
+
     border-radius:8px;
 
     background:rgba(255,90,30,.55);
+
     color:#fff;
 
     font-weight:800;
+
     cursor:pointer;
 
     text-shadow:1px 1px 2px #000;
@@ -91,18 +117,23 @@ body{
 }
 
 .menu-btn:hover{
+
     background:rgba(255,120,50,.85);
+
     transform:scale(1.04);
 }
 
-/* =========================
+
+/* =====================================================
    OPÇÕES
-========================= */
+===================================================== */
 
 #rules{
+
     display:none;
 
     position:absolute;
+
     right:28px;
     top:28px;
 
@@ -116,6 +147,7 @@ body{
     background:rgba(0,0,0,.88);
 
     border:2px solid #ffd34d;
+
     border-radius:12px;
 
     color:#fff;
@@ -126,34 +158,46 @@ body{
 }
 
 #rules h2{
+
     color:#ffd34d;
+
     text-align:center;
+
     margin-bottom:12px;
 }
 
 #rules h3{
+
     color:#7fffd4;
+
     margin:12px 0 5px;
 }
 
 #rules li{
+
     margin:6px 0;
+
     line-height:1.35;
 }
 
-/* =========================
+
+/* =====================================================
    SELEÇÃO DE PERSONAGEM
-========================= */
+===================================================== */
 
 #selection{
-    background:url("WhatsApp Image 2026-08-29 at 16.05.19.jpeg")
-    center/cover no-repeat;
+
+    background:
+        url("WhatsApp Image 2026-08-29 at 16.05.19.jpeg")
+        center/cover no-repeat;
 }
 
 #select-title{
+
     position:absolute;
 
     top:1.5%;
+
     left:0;
     right:0;
 
@@ -162,6 +206,7 @@ body{
     color:#fff;
 
     font-size:30px;
+
     font-weight:900;
 
     text-shadow:0 3px 8px #000;
@@ -169,14 +214,23 @@ body{
     z-index:20;
 }
 
+
 /*
-   IMPORTANTE:
-   Essa grade é INVISÍVEL.
-   Ela serve somente para criar as áreas clicáveis
-   exatamente sobre as cartas da imagem.
+========================================================
+   GRADE INVISÍVEL DE SELEÇÃO
+
+   É AQUI QUE VOCÊ PODE AJUSTAR AS COORDENADAS.
+
+   top    = distância do topo
+   bottom = distância de baixo
+   left   = distância da esquerda
+   right  = distância da direita
+
+========================================================
 */
 
 #select-grid{
+
     position:absolute;
 
     left:1.5%;
@@ -188,6 +242,7 @@ body{
     display:grid;
 
     grid-template-columns:repeat(6,1fr);
+
     grid-template-rows:repeat(2,1fr);
 
     gap:5px 8px;
@@ -196,7 +251,9 @@ body{
 }
 
 .char-hit{
+
     border:0;
+
     background:transparent;
 
     border-radius:12px;
@@ -204,10 +261,12 @@ body{
     cursor:pointer;
 
     min-width:0;
+
     min-height:0;
 }
 
 .char-hit:hover{
+
     background:rgba(255,255,255,.08);
 
     box-shadow:
@@ -216,9 +275,11 @@ body{
 }
 
 #select-info{
+
     position:absolute;
 
     left:50%;
+
     bottom:1.7%;
 
     transform:translateX(-50%);
@@ -236,19 +297,24 @@ body{
     z-index:20;
 }
 
-/* =========================
+
+/* =====================================================
    ARENA
-========================= */
+===================================================== */
 
 #fight{
-    background:url("arena fazenda.jfif")
-    center/cover no-repeat;
+
+    background:
+        url("arena fazenda.jfif")
+        center/cover no-repeat;
 }
 
 #fight:after{
+
     content:"";
 
     position:absolute;
+
     inset:0;
 
     background:
@@ -262,14 +328,17 @@ body{
     pointer-events:none;
 }
 
-/* =========================
+
+/* =====================================================
    BARRAS DE VIDA
-========================= */
+===================================================== */
 
 #hud{
+
     position:absolute;
 
     top:18px;
+
     left:25px;
     right:25px;
 
@@ -285,6 +354,7 @@ body{
 }
 
 .name{
+
     text-align:center;
 
     color:#fff;
@@ -299,6 +369,7 @@ body{
 }
 
 .hp{
+
     height:30px;
 
     background:#180d0d;
@@ -313,6 +384,7 @@ body{
 }
 
 .hp-fill{
+
     height:100%;
 
     width:100%;
@@ -328,6 +400,7 @@ body{
 }
 
 #p2hp .hp-fill{
+
     float:right;
 
     background:
@@ -339,6 +412,7 @@ body{
 }
 
 #timer{
+
     font-size:44px;
 
     text-align:center;
@@ -350,11 +424,13 @@ body{
     text-shadow:0 3px 8px #000;
 }
 
-/* =========================
+
+/* =====================================================
    LUTADORES
-========================= */
+===================================================== */
 
 #arena{
+
     position:absolute;
 
     left:0;
@@ -367,11 +443,13 @@ body{
 }
 
 .fighter{
+
     position:absolute;
 
     bottom:28px;
 
     width:285px;
+
     height:455px;
 
     background-repeat:no-repeat;
@@ -395,18 +473,24 @@ body{
 }
 
 #fighter1{
+
     left:100px;
 }
 
 #fighter2{
+
     left:880px;
 
     transform:scaleX(-1);
 }
 
-/* SOCOS */
+
+/* =====================================================
+   SOCO
+===================================================== */
 
 .fighter.punch{
+
     filter:
         brightness(1.7)
         drop-shadow(
@@ -418,20 +502,29 @@ body{
 }
 
 #fighter2.punch{
+
     transform:
         scaleX(-1)
         scale(1.08);
 }
 
-/* PERSONAGEM ATINGIDO */
+
+/* =====================================================
+   PERSONAGEM ATINGIDO
+===================================================== */
 
 .fighter.hit{
-    animation:hit .18s linear;
+
+    animation:
+        hit
+        .18s
+        linear;
 }
 
 @keyframes hit{
 
     0%{
+
         filter:
             brightness(2)
             drop-shadow(
@@ -441,6 +534,7 @@ body{
     }
 
     100%{
+
         filter:
             brightness(1)
             drop-shadow(
@@ -448,18 +542,26 @@ body{
                 #000
             );
     }
-
 }
 
-/* FATALITY */
+
+/* =====================================================
+   FATALITY
+===================================================== */
 
 .fighter.fatal{
-    animation:fatal .14s infinite alternate;
+
+    animation:
+        fatal
+        .14s
+        infinite
+        alternate;
 }
 
 @keyframes fatal{
 
     from{
+
         filter:
             brightness(1.2)
             drop-shadow(
@@ -469,6 +571,7 @@ body{
     }
 
     to{
+
         filter:
             brightness(3)
             drop-shadow(
@@ -476,14 +579,15 @@ body{
                 red
             );
     }
-
 }
 
-/* =========================
+
+/* =====================================================
    EFEITOS
-========================= */
+===================================================== */
 
 #effects{
+
     position:absolute;
 
     inset:0;
@@ -494,6 +598,7 @@ body{
 }
 
 .fx{
+
     position:absolute;
 
     width:100px;
@@ -513,25 +618,31 @@ body{
 @keyframes boom{
 
     from{
+
         transform:scale(.2);
+
         opacity:1;
     }
 
     to{
+
         transform:scale(2.2);
+
         opacity:0;
     }
-
 }
 
-/* =========================
+
+/* =====================================================
    CONTROLES
-========================= */
+===================================================== */
 
 #controls{
+
     position:absolute;
 
     left:50%;
+
     bottom:18px;
 
     transform:translateX(-50%);
@@ -551,11 +662,13 @@ body{
     text-align:center;
 }
 
-/* =========================
+
+/* =====================================================
    FLASH CARD
-========================= */
+===================================================== */
 
 #flash{
+
     position:absolute;
 
     inset:0;
@@ -565,6 +678,7 @@ body{
     display:none;
 
     align-items:center;
+
     justify-content:center;
 
     flex-direction:column;
@@ -575,10 +689,12 @@ body{
 }
 
 #flash.show{
+
     display:flex;
 }
 
 #flash h2{
+
     color:#ffd34d;
 
     text-align:center;
@@ -590,7 +706,9 @@ body{
 }
 
 #flash img{
+
     max-width:78%;
+
     max-height:72%;
 
     object-fit:contain;
@@ -605,6 +723,7 @@ body{
 }
 
 #flash p{
+
     margin-top:12px;
 
     color:#fff;
@@ -617,6 +736,7 @@ body{
 }
 
 .flash-buttons{
+
     display:flex;
 
     gap:12px;
@@ -625,6 +745,7 @@ body{
 }
 
 .flash-btn{
+
     padding:10px 22px;
 
     border:0;
@@ -639,22 +760,27 @@ body{
 }
 
 .correct{
+
     background:#1bb35b;
 }
 
 .wrong{
+
     background:#d93434;
 }
 
 .flip{
+
     background:#555;
 }
 
-/* =========================
+
+/* =====================================================
    VITÓRIA
-========================= */
+===================================================== */
 
 #victory{
+
     position:absolute;
 
     inset:0;
@@ -664,6 +790,7 @@ body{
     display:none;
 
     align-items:center;
+
     justify-content:center;
 
     flex-direction:column;
@@ -676,6 +803,7 @@ body{
 }
 
 #victory h1{
+
     font-size:58px;
 
     color:#ffd34d;
@@ -685,12 +813,14 @@ body{
 }
 
 #victory p{
+
     font-size:26px;
 
     margin:12px;
 }
 
 #victory button{
+
     padding:12px 22px;
 
     border:0;
@@ -706,11 +836,13 @@ body{
     cursor:pointer;
 }
 
-/* =========================
+
+/* =====================================================
    PAUSA
-========================= */
+===================================================== */
 
 #pause{
+
     position:absolute;
 
     inset:0;
@@ -720,6 +852,7 @@ body{
     display:none;
 
     align-items:center;
+
     justify-content:center;
 
     background:rgba(0,0,0,.7);
@@ -732,12 +865,19 @@ body{
 }
 
 #pause.show{
+
     display:flex;
 }
+
+
+/* =====================================================
+   RESPONSIVO
+===================================================== */
 
 @media(max-width:900px){
 
     #game{
+
         transform:
             scale(
                 calc(
@@ -748,52 +888,62 @@ body{
                 )
             );
     }
-
 }
 
 </style>
+
 </head>
+
 
 <body>
 
 <div id="game">
 
+
 <!-- =====================================================
      MENU
 ===================================================== -->
 
-<section id="menu" class="screen active">
+<section
+    id="menu"
+    class="screen active"
+>
 
     <div class="menu-buttons">
 
         <button
             class="menu-btn"
-            onclick="startMode('1P')">
+            onclick="startMode('1P')"
+        >
             1 Jogador
         </button>
 
         <button
             class="menu-btn"
-            onclick="startMode('2P')">
+            onclick="startMode('2P')"
+        >
             2 Jogadores
         </button>
 
         <button
             class="menu-btn"
-            onclick="openSelection()">
+            onclick="openSelection()"
+        >
             Escolher Lutador
         </button>
 
         <button
             class="menu-btn"
-            onclick="toggleRules()">
+            onclick="toggleRules()"
+        >
             Opções
         </button>
 
     </div>
 
+
     <!-- =================================================
-         OPÇÕES / COMANDOS
+         OPÇÕES
     ================================================== -->
 
     <div id="rules">
@@ -850,6 +1000,7 @@ body{
 
         </ul>
 
+
         <h3>
             Jogador 2 — teclado
         </h3>
@@ -882,6 +1033,7 @@ body{
             </li>
 
         </ul>
+
 
         <h3>
             Manetes
@@ -932,6 +1084,7 @@ body{
             </li>
 
         </ul>
+
 
         <h3>
             Regras da luta
@@ -997,17 +1150,25 @@ body{
      SELEÇÃO
 ===================================================== -->
 
-<section id="selection" class="screen">
+<section
+    id="selection"
+    class="screen"
+>
 
     <div id="select-title">
         ESCOLHA SEU LUTADOR
     </div>
 
+
+    <!-- ÁREAS INVISÍVEIS CLICÁVEIS -->
+
     <div id="select-grid"></div>
+
 
     <div id="select-info">
         Jogador 1: escolha um personagem
     </div>
+
 
     <button
         class="menu-btn"
@@ -1017,10 +1178,9 @@ body{
             bottom:18px;
             z-index:30;
         "
-        onclick="showMenu()">
-
+        onclick="showMenu()"
+    >
         Voltar
-
     </button>
 
 </section>
@@ -1030,7 +1190,11 @@ body{
      LUTA
 ===================================================== -->
 
-<section id="fight" class="screen">
+<section
+    id="fight"
+    class="screen"
+>
+
 
     <!-- HUD -->
 
@@ -1040,7 +1204,8 @@ body{
 
             <div
                 class="name"
-                id="name1">
+                id="name1"
+            >
                 JOGADOR 1
             </div>
 
@@ -1048,8 +1213,8 @@ body{
 
                 <div
                     id="hp1"
-                    class="hp-fill">
-                </div>
+                    class="hp-fill"
+                ></div>
 
             </div>
 
@@ -1065,18 +1230,20 @@ body{
 
             <div
                 class="name"
-                id="name2">
+                id="name2"
+            >
                 ROBÔ (IA)
             </div>
 
             <div
                 id="p2hp"
-                class="hp">
+                class="hp"
+            >
 
                 <div
                     id="hp2"
-                    class="hp-fill">
-                </div>
+                    class="hp-fill"
+                ></div>
 
             </div>
 
@@ -1091,13 +1258,13 @@ body{
 
         <div
             id="fighter1"
-            class="fighter">
-        </div>
+            class="fighter"
+        ></div>
 
         <div
             id="fighter2"
-            class="fighter">
-        </div>
+            class="fighter"
+        ></div>
 
     </div>
 
@@ -1133,10 +1300,13 @@ body{
             HORA DA QUÍMICA!
         </h2>
 
+
         <img
             id="flash-img"
             src=""
-            alt="Pergunta">
+            alt="Pergunta"
+        >
+
 
         <p id="flash-help">
 
@@ -1146,30 +1316,30 @@ body{
 
         </p>
 
+
         <div class="flash-buttons">
 
             <button
                 class="flash-btn correct"
-                onclick="answerFlash('correct')">
-
+                onclick="answerFlash('correct')"
+            >
                 C — ACERTEI
-
             </button>
+
 
             <button
                 class="flash-btn wrong"
-                onclick="answerFlash('wrong')">
-
+                onclick="answerFlash('wrong')"
+            >
                 E — ERREI
-
             </button>
+
 
             <button
                 class="flash-btn flip"
-                onclick="flipFlash()">
-
+                onclick="flipFlash()"
+            >
                 D — VIRAR
-
             </button>
 
         </div>
@@ -1187,12 +1357,12 @@ body{
             VITÓRIA!
         </h1>
 
+
         <p id="winnerText"></p>
 
+
         <button onclick="showMenu()">
-
             Voltar ao Menu
-
         </button>
 
     </div>
@@ -1210,19 +1380,19 @@ body{
 
 const ASSETS = {
 
-    /* FUNDO DO MENU = IMAGEM 20 */
     menu:
         "WhatsApp Image 2026-08-30 at 16.00.20.jpeg",
 
-    /* TELA DE ESCOLHA = IMAGEM 19 */
     selection:
         "WhatsApp Image 2026-08-29 at 16.05.19.jpeg",
 
-    /* ARENA REAL */
     arena:
         "arena fazenda.jfif",
 
-    /* PERSONAGENS */
+
+    /* =================================================
+       PERSONAGENS
+    ================================================== */
 
     chars:[
 
@@ -1288,7 +1458,10 @@ const ASSETS = {
 
     ],
 
-    /* FLASH CARDS */
+
+    /* =================================================
+       FLASH CARDS
+    ================================================== */
 
     questions:{
 
@@ -1334,7 +1507,9 @@ let mode = "1P";
 let selectionStep = 1;
 
 
-/* JOGADOR 1 */
+/* =====================================================
+   JOGADOR 1
+===================================================== */
 
 let p1 = {
 
@@ -1356,7 +1531,9 @@ let p1 = {
 };
 
 
-/* JOGADOR 2 / IA */
+/* =====================================================
+   JOGADOR 2 / IA
+===================================================== */
 
 let p2 = {
 
@@ -1658,6 +1835,7 @@ function openSelection(){
 
     sound("click");
 
+
     $("selection").style.backgroundImage =
         `url("${ASSETS.selection}")`;
 
@@ -1690,7 +1868,7 @@ function openSelection(){
 
 
 /* =====================================================
-   CRIA AS ÁREAS INVISÍVEIS DAS CARTAS
+   CRIAR ÁREAS INVISÍVEIS
 ===================================================== */
 
 function buildSelection(){
@@ -1707,11 +1885,14 @@ function buildSelection(){
             const b =
                 document.createElement("button");
 
+
             b.className =
                 "char-hit";
 
+
             b.title =
                 character[0];
+
 
             b.setAttribute(
                 "aria-label",
@@ -1745,7 +1926,9 @@ function chooseChar(i){
         ASSETS.chars[i];
 
 
-    /* PRIMEIRO JOGADOR */
+    /* =================================================
+       PRIMEIRO JOGADOR
+    ================================================== */
 
     if(selectionStep === 1){
 
@@ -1756,7 +1939,9 @@ function chooseChar(i){
             c[1];
 
 
-        /* MODO 1 JOGADOR */
+        /* =============================================
+           MODO 1 JOGADOR
+        ============================================== */
 
         if(mode === "1P"){
 
@@ -1786,10 +1971,12 @@ function chooseChar(i){
 
             startFight();
 
-
         }
 
-        /* MODO 2 JOGADORES */
+
+        /* =============================================
+           MODO 2 JOGADORES
+        ============================================== */
 
         else{
 
@@ -1805,10 +1992,12 @@ function chooseChar(i){
 
         }
 
-
     }
 
-    /* SEGUNDO JOGADOR */
+
+    /* =================================================
+       SEGUNDO JOGADOR
+    ================================================== */
 
     else{
 
@@ -1844,6 +2033,7 @@ function startFight(){
 
     sound("click");
 
+
     running = true;
 
     paused = false;
@@ -1851,6 +2041,8 @@ function startFight(){
     flashOpen = false;
 
     flashFace = "front";
+
+    questionAnswered = false;
 
     fightTimer = 90;
 
@@ -1905,8 +2097,21 @@ function startFight(){
         1;
 
 
-    $("message").style.display =
-        "none";
+    /*
+       CORREÇÃO PRINCIPAL:
+
+       O código antigo tinha:
+
+       $("message").style.display = "none";
+
+       Mas não existe nenhum elemento
+       com id="message".
+
+       Isso gerava erro e impedia
+       a entrada na arena.
+
+       O trecho foi REMOVIDO.
+    */
 
 
     $("victory").style.display =
@@ -1917,12 +2122,6 @@ function startFight(){
         .classList
         .remove("show");
 
-
-    /*
-       FUNDO DA LUTA
-       AGORA COM O NOME CORRETO:
-       arena fazenda.jfif
-    */
 
     $("game").style.backgroundImage =
         `url("${ASSETS.arena}")`;
@@ -1938,9 +2137,9 @@ function startFight(){
     clearTimeout(questionTimer);
 
 
-    /*
+    /* =================================================
        CRONÔMETRO
-    */
+    ================================================== */
 
     timerId =
         setInterval(()=>{
@@ -1955,6 +2154,7 @@ function startFight(){
 
 
             fightTimer--;
+
 
             $("timer").textContent =
                 Math.max(
@@ -1976,9 +2176,9 @@ function startFight(){
         },1000);
 
 
-    /*
+    /* =================================================
        IA
-    */
+    ================================================== */
 
     if(mode === "1P"){
 
@@ -1991,10 +2191,9 @@ function startFight(){
     }
 
 
-    /*
-       PERGUNTA:
-       APROXIMADAMENTE NO MEIO DA LUTA
-    */
+    /* =================================================
+       PERGUNTA
+    ================================================== */
 
     questionTimer =
         setTimeout(
@@ -2018,11 +2217,13 @@ function startFight(){
 function endFight(winner){
 
     if(!running){
+
         return;
     }
 
 
     running = false;
+
 
     clearInterval(timerId);
 
@@ -2031,14 +2232,11 @@ function endFight(winner){
     clearTimeout(questionTimer);
 
 
-    timerId =
-        null;
+    timerId = null;
 
-    aiId =
-        null;
+    aiId = null;
 
-    questionTimer =
-        null;
+    questionTimer = null;
 
 
     flashOpen = false;
@@ -2078,6 +2276,7 @@ function stopFight(){
 
     running = false;
 
+
     clearInterval(timerId);
 
     clearInterval(aiId);
@@ -2104,27 +2303,16 @@ function scheduleQuestion(){
         !running ||
         flashOpen
     ){
+
         return;
     }
 
-
-    /*
-       MODO 1P:
-       SEMPRE O HUMANO RESPONDE.
-    */
 
     if(mode === "1P"){
 
         questionOwner = 1;
 
-    }
-
-    /*
-       MODO 2P:
-       ALEATÓRIO
-    */
-
-    else{
+    }else{
 
         questionOwner =
             Math.random() < .5
@@ -2149,6 +2337,7 @@ function openFlash(){
         !running ||
         flashOpen
     ){
+
         return;
     }
 
@@ -2207,6 +2396,7 @@ function openFlash(){
 function flipFlash(){
 
     if(!flashOpen){
+
         return;
     }
 
@@ -2243,6 +2433,7 @@ function answerFlash(result){
         !flashOpen ||
         questionAnswered
     ){
+
         return;
     }
 
@@ -2259,14 +2450,6 @@ function answerFlash(result){
             ][1];
 
 
-    /*
-       SE ACERTOU:
-       O PRÓPRIO JOGADOR GANHA.
-
-       SE ERROU:
-       O ADVERSÁRIO GANHA.
-    */
-
     const winner =
         result === "correct"
         ? questionOwner
@@ -2276,11 +2459,6 @@ function answerFlash(result){
             : 1
         );
 
-
-    /*
-       PRÊMIO ALEATÓRIO:
-       VIDA OU FATALITY
-    */
 
     const prize =
         Math.random() < .5
@@ -2392,10 +2570,6 @@ function answerFlash(result){
     updateHp();
 
 
-    /*
-       VOLTA AUTOMATICAMENTE PARA A LUTA
-    */
-
     setTimeout(
         closeFlash,
         1300
@@ -2411,6 +2585,7 @@ function answerFlash(result){
 function closeFlash(){
 
     if(!flashOpen){
+
         return;
     }
 
@@ -2525,6 +2700,7 @@ function punch(player){
         paused ||
         flashOpen
     ){
+
         return;
     }
 
@@ -2541,17 +2717,13 @@ function punch(player){
         : p1;
 
 
-    /*
-       SE ESTIVER MUITO LONGE,
-       O GOLPE NÃO ACERTA.
-    */
-
     if(
         !canHit(
             self,
             enemy
         )
     ){
+
         return;
     }
 
@@ -2601,10 +2773,6 @@ function punch(player){
     },180);
 
 
-    /*
-       DANO REAL
-    */
-
     enemy.hp -= 10;
 
 
@@ -2624,6 +2792,7 @@ function jump(player){
         paused ||
         flashOpen
     ){
+
         return;
     }
 
@@ -2641,6 +2810,7 @@ function jump(player){
 
 
     if(f.jump){
+
         return;
     }
 
@@ -2681,6 +2851,7 @@ function crouch(
         paused ||
         flashOpen
     ){
+
         return;
     }
 
@@ -2722,6 +2893,7 @@ function move(
         paused ||
         flashOpen
     ){
+
         return;
     }
 
@@ -2766,6 +2938,7 @@ function fatality(player){
         paused ||
         flashOpen
     ){
+
         return;
     }
 
@@ -2782,22 +2955,11 @@ function fatality(player){
         : p1;
 
 
-    /*
-       PRECISA TER GANHADO
-       O FATALITY.
-    */
-
     if(!self.fatal){
 
         return;
-
     }
 
-
-    /*
-       PRECISA ESTAR PERTO
-       DO ADVERSÁRIO.
-    */
 
     if(
         !canHit(
@@ -2807,7 +2969,6 @@ function fatality(player){
     ){
 
         return;
-
     }
 
 
@@ -2829,26 +2990,14 @@ function fatality(player){
         : $("fighter1");
 
 
-    /*
-       BRILHO
-    */
-
     attacker
         .classList
         .add("fatal");
 
 
-    /*
-       ADVERSÁRIO FICA FRACO
-    */
-
     enemyElement.style.opacity =
         ".15";
 
-
-    /*
-       EXPLOSÕES
-    */
 
     for(
         let i=0;
@@ -2875,10 +3024,6 @@ function fatality(player){
 
     }
 
-
-    /*
-       FATALITY ZERA A VIDA
-    */
 
     enemy.hp = 0;
 
@@ -2947,22 +3092,15 @@ function aiThink(){
         paused ||
         flashOpen
     ){
+
         return;
     }
 
-
-    /*
-       DISTÂNCIA
-    */
 
     const d =
         p1.x -
         p2.x;
 
-
-    /*
-       IA SE APROXIMA
-    */
 
     if(
         Math.abs(d) > 230
@@ -2977,10 +3115,6 @@ function aiThink(){
 
     }
 
-    /*
-       IA ATACA
-    */
-
     else if(
         Math.random() < .45
     ){
@@ -2990,10 +3124,6 @@ function aiThink(){
     }
 
 
-    /*
-       IA PULA
-    */
-
     if(
         Math.random() < .08
     ){
@@ -3002,10 +3132,6 @@ function aiThink(){
 
     }
 
-
-    /*
-       IA AGACHA
-    */
 
     if(
         Math.random() < .05
@@ -3025,10 +3151,6 @@ function aiThink(){
 
     }
 
-
-    /*
-       IA PODE USAR FATALITY
-    */
 
     if(
         p2.fatal &&
@@ -3052,7 +3174,6 @@ function gameLoop(){
     if(!running){
 
         return;
-
     }
 
 
@@ -3079,11 +3200,6 @@ function gameLoop(){
         const f2 =
             $("fighter2");
 
-
-        /*
-           PERSONAGENS SE VIRAM
-           UM PARA O OUTRO
-        */
 
         f1.style.transform =
             p1.x <= p2.x
@@ -3131,17 +3247,13 @@ function handleKeyDown(e){
     }
 
 
-    /*
+    /* =================================================
        FLASH CARD
-    */
+    ================================================== */
 
     if(flashOpen){
 
         if(!questionAnswered){
-
-            /*
-               C = CORRETO
-            */
 
             if(
                 k.toLowerCase() === "c"
@@ -3156,10 +3268,6 @@ function handleKeyDown(e){
             }
 
 
-            /*
-               E = ERRADO
-            */
-
             if(
                 k.toLowerCase() === "e"
             ){
@@ -3172,10 +3280,6 @@ function handleKeyDown(e){
 
             }
 
-
-            /*
-               D = VIRAR
-            */
 
             if(
                 k.toLowerCase() === "d"
@@ -3195,9 +3299,9 @@ function handleKeyDown(e){
     }
 
 
-    /*
+    /* =================================================
        ESC
-    */
+    ================================================== */
 
     if(
         e.key === "Escape"
@@ -3224,9 +3328,9 @@ function handleKeyDown(e){
         k.toLowerCase();
 
 
-    /* =============================================
+    /* =================================================
        JOGADOR 1
-    ============================================= */
+    ================================================== */
 
     if(
         low === "w"
@@ -3271,10 +3375,6 @@ function handleKeyDown(e){
 
     }
 
-    /*
-       SHIFT ESQUERDO = P1
-    */
-
     else if(
         e.code === "ShiftLeft" ||
         (
@@ -3288,9 +3388,9 @@ function handleKeyDown(e){
     }
 
 
-    /* =============================================
+    /* =================================================
        JOGADOR 2
-    ============================================= */
+    ================================================== */
 
     if(mode === "2P"){
 
@@ -3336,10 +3436,6 @@ function handleKeyDown(e){
             punch(2);
 
         }
-
-        /*
-           SHIFT DIREITO = P2
-        */
 
         else if(
             e.code === "ShiftRight"
@@ -3416,14 +3512,8 @@ function pollGamepads(){
     ){
 
         return;
-
     }
 
-
-    /*
-       PEGA OS DOIS PRIMEIROS
-       CONTROLES CONECTADOS
-    */
 
     const gps =
         Array
@@ -3443,10 +3533,6 @@ function pollGamepads(){
         const gp =
             gps[i];
 
-
-        /*
-           ANALÓGICO ESQUERDO
-        */
 
         const axisX =
             Math.abs(
@@ -3501,9 +3587,7 @@ function pollGamepads(){
                 !prev[n];
 
 
-        /*
-           D-PAD
-        */
+        /* D-PAD */
 
         if(axisX === 0){
 
@@ -3533,10 +3617,7 @@ function pollGamepads(){
         }
 
 
-        /*
-           ↑ / A
-           PULAR
-        */
+        /* PULAR */
 
         if(
             just(12) ||
@@ -3550,10 +3631,7 @@ function pollGamepads(){
         }
 
 
-        /*
-           ↓ / B
-           AGACHAR
-        */
+        /* AGACHAR */
 
         if(
             just(13) ||
@@ -3568,10 +3646,7 @@ function pollGamepads(){
         }
 
 
-        /*
-           X / QUADRADO
-           SOCO
-        */
+        /* SOCO */
 
         if(
             just(2)
@@ -3584,10 +3659,7 @@ function pollGamepads(){
         }
 
 
-        /*
-           Y / TRIÂNGULO
-           FATALITY
-        */
+        /* FATALITY */
 
         if(
             just(3)
@@ -3617,6 +3689,7 @@ window.addEventListener(
     handleKeyDown
 );
 
+
 window.addEventListener(
     "keyup",
     handleKeyUp
@@ -3640,4 +3713,5 @@ buildSelection();
 </script>
 
 </body>
+
 </html>
