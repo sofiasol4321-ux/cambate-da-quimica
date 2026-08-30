@@ -3,651 +3,754 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Combate da Química</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
-    background: #000;
-    overflow: hidden;
-    font-family: Arial, Helvetica, sans-serif;
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
-#game {
-    position: relative;
-    width: min(100vw, 177.78vh);
-    height: min(100vh, 56.25vw);
-    max-width: 1280px;
-    max-height: 720px;
-    margin: auto;
-    overflow: hidden;
-    background: #000;
+body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
-.screen {
-    position: absolute;
-    inset: 0;
-    display: none;
+#game{
+    position:relative;
+    width:1280px;
+    height:720px;
+    overflow:hidden;
+    background:#000 center/cover no-repeat;
 }
 
-.screen.active {
-    display: block;
+/* =========================
+   TELAS
+========================= */
+
+.screen{
+    position:absolute;
+    inset:0;
+    display:none;
 }
 
-.bg,
-#arena-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.screen.active{
+    display:block;
 }
 
 /* =========================
    MENU
 ========================= */
 
-#menu .menu-hit {
-    position: absolute;
-    top: 60%;
-    height: 16%;
-    width: 9.5%;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    z-index: 10;
+#menu{
+    background:url("WhatsApp Image 2026-08-30 at 16.00.20.jpeg") center/cover no-repeat;
 }
 
-.m1 { left: 4%; }
-.m2 { left: 14.5%; }
-.m3 { left: 25%; }
-.m4 { left: 35.5%; }
-.m5 { left: 46%; }
-.m6 { left: 57%; }
-.m7 { left: 67.5%; }
-.m8 { left: 78%; }
+.menu-buttons{
+    position:absolute;
+    left:50%;
+    bottom:7%;
+    transform:translateX(-50%);
 
-#menu .menu-hit:hover {
-    background: rgba(255,170,40,.12);
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+
+    width:92%;
+    z-index:5;
 }
 
-/* =========================
-   SELEÇÃO DE LUTADORES
-========================= */
+.menu-btn{
+    padding:12px 18px;
 
-#select .char-grid {
-    position: absolute;
-    z-index: 10;
-    left: 2.3%;
-    top: 12.5%;
-    width: 95.4%;
-    height: 76.5%;
+    border:2px solid rgba(255,255,255,.8);
+    border-radius:8px;
 
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 1.2%;
+    background:rgba(255,90,30,.55);
+    color:#fff;
+
+    font-weight:800;
+    cursor:pointer;
+
+    text-shadow:1px 1px 2px #000;
+
+    transition:.2s;
 }
 
-.char-hit {
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    border-radius: 10px;
-}
-
-.char-hit:hover {
-    background: rgba(255,255,255,.08);
-    box-shadow: 0 0 25px rgba(255,150,30,.35) inset;
-}
-
-#select .back {
-    position: absolute;
-    left: 2%;
-    bottom: 2%;
-    width: 16%;
-    height: 6%;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    z-index: 15;
+.menu-btn:hover{
+    background:rgba(255,120,50,.85);
+    transform:scale(1.04);
 }
 
 /* =========================
    OPÇÕES
 ========================= */
 
-#options {
-    position: absolute;
-    inset: 0;
-    z-index: 80;
+#rules{
+    display:none;
 
-    display: none;
-    align-items: center;
-    justify-content: center;
+    position:absolute;
+    right:28px;
+    top:28px;
 
-    background: rgba(0,0,0,.80);
-    padding: 4%;
+    width:410px;
+    max-height:610px;
+
+    overflow:auto;
+
+    padding:20px;
+
+    background:rgba(0,0,0,.88);
+
+    border:2px solid #ffd34d;
+    border-radius:12px;
+
+    color:#fff;
+
+    z-index:30;
+
+    box-shadow:0 0 30px #000;
 }
 
-#options.show {
-    display: flex;
+#rules h2{
+    color:#ffd34d;
+    text-align:center;
+    margin-bottom:12px;
 }
 
-.options-box {
-    width: min(900px, 92%);
-    max-height: 90%;
-    overflow-y: auto;
-
-    padding: 28px 34px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(10,15,35,.98),
-            rgba(30,12,40,.98)
-        );
-
-    border: 2px solid #ffd12e;
-    border-radius: 14px;
-
-    box-shadow: 0 0 35px rgba(255,180,30,.35);
-
-    color: white;
+#rules h3{
+    color:#7fffd4;
+    margin:12px 0 5px;
 }
 
-.options-box h1 {
-    text-align: center;
-    color: #ffd12e;
-    font-size: clamp(24px,4vw,42px);
-    margin-bottom: 18px;
-}
-
-.options-box h2 {
-    color: #8bdcff;
-    font-size: clamp(17px,2.4vw,24px);
-    margin: 17px 0 8px;
-}
-
-.options-box p,
-.options-box li {
-    font-size: clamp(13px,1.6vw,17px);
-    line-height: 1.45;
-}
-
-.options-box ul {
-    padding-left: 22px;
-}
-
-.key {
-    display: inline-block;
-    min-width: 34px;
-    padding: 3px 7px;
-    margin: 1px 2px;
-
-    text-align: center;
-
-    border: 1px solid #aaa;
-    border-radius: 5px;
-
-    background: #171717;
-
-    font-weight: bold;
-}
-
-.close-options {
-    display: block;
-    margin: 22px auto 0;
-
-    padding: 11px 28px;
-
-    border: 1px solid #ffd12e;
-    border-radius: 7px;
-
-    background: #161616;
-    color: white;
-
-    font-weight: bold;
-
-    cursor: pointer;
+#rules li{
+    margin:6px 0;
+    line-height:1.35;
 }
 
 /* =========================
-   ARENA / HUD
+   SELEÇÃO DE PERSONAGEM
 ========================= */
 
-#fight {
-    background: #000;
+#selection{
+    background:url("WhatsApp Image 2026-08-29 at 16.05.19.jpeg")
+    center/cover no-repeat;
 }
 
-#hud {
-    position: absolute;
+#select-title{
+    position:absolute;
 
-    top: 3%;
-    left: 3%;
-    right: 3%;
+    top:1.5%;
+    left:0;
+    right:0;
 
-    z-index: 8;
+    text-align:center;
 
-    display: grid;
-    grid-template-columns: 1fr 90px 1fr;
-    gap: 2%;
+    color:#fff;
 
-    align-items: center;
+    font-size:30px;
+    font-weight:900;
+
+    text-shadow:0 3px 8px #000;
+
+    z-index:20;
 }
 
-.name {
-    font-weight: 900;
-    color: white;
+/*
+   IMPORTANTE:
+   Essa grade é INVISÍVEL.
+   Ela serve somente para criar as áreas clicáveis
+   exatamente sobre as cartas da imagem.
+*/
 
-    text-shadow: 2px 2px 4px #000;
+#select-grid{
+    position:absolute;
 
-    font-size: clamp(11px,1.5vw,20px);
+    left:1.5%;
+    right:1.5%;
 
-    margin-bottom: 5px;
+    top:6%;
+    bottom:9%;
+
+    display:grid;
+
+    grid-template-columns:repeat(6,1fr);
+    grid-template-rows:repeat(2,1fr);
+
+    gap:5px 8px;
+
+    z-index:10;
 }
 
-.name.right {
-    text-align: right;
+.char-hit{
+    border:0;
+    background:transparent;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    min-width:0;
+    min-height:0;
 }
 
-.bar {
-    height: 28px;
+.char-hit:hover{
+    background:rgba(255,255,255,.08);
 
-    background: #111;
-
-    border: 3px solid #d9b43b;
-
-    transform: skewX(-12deg);
-
-    overflow: hidden;
+    box-shadow:
+        inset 0 0 0 3px rgba(255,255,255,.25),
+        0 0 18px rgba(255,120,40,.45);
 }
 
-.fill {
-    height: 100%;
-    width: 100%;
+#select-info{
+    position:absolute;
+
+    left:50%;
+    bottom:1.7%;
+
+    transform:translateX(-50%);
+
+    padding:8px 18px;
+
+    border-radius:20px;
+
+    background:rgba(0,0,0,.65);
+
+    color:#fff;
+
+    font-weight:700;
+
+    z-index:20;
+}
+
+/* =========================
+   ARENA
+========================= */
+
+#fight{
+    background:url("arena fazenda.jfif")
+    center/cover no-repeat;
+}
+
+#fight:after{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,.15),
+            transparent 45%,
+            rgba(0,0,0,.18)
+        );
+
+    pointer-events:none;
+}
+
+/* =========================
+   BARRAS DE VIDA
+========================= */
+
+#hud{
+    position:absolute;
+
+    top:18px;
+    left:25px;
+    right:25px;
+
+    z-index:20;
+
+    display:grid;
+
+    grid-template-columns:1fr 120px 1fr;
+
+    gap:20px;
+
+    align-items:center;
+}
+
+.name{
+    text-align:center;
+
+    color:#fff;
+
+    font-weight:900;
+
+    font-size:18px;
+
+    text-shadow:0 2px 4px #000;
+
+    margin-bottom:5px;
+}
+
+.hp{
+    height:30px;
+
+    background:#180d0d;
+
+    border:3px solid #f7d54c;
+
+    overflow:hidden;
+
+    transform:skewX(-12deg);
+
+    box-shadow:0 0 12px #000;
+}
+
+.hp-fill{
+    height:100%;
+
+    width:100%;
 
     background:
         linear-gradient(
             90deg,
-            #1aff00,
-            #ffe100
+            #20e85a,
+            #e8e51f
         );
 
-    transition: width .25s;
+    transition:width .18s;
 }
 
-#p2bar .fill {
-    float: right;
+#p2hp .hp-fill{
+    float:right;
+
+    background:
+        linear-gradient(
+            90deg,
+            #e8e51f,
+            #20e85a
+        );
 }
 
-#timer {
-    text-align: center;
+#timer{
+    font-size:44px;
 
-    font-size: clamp(20px,3vw,40px);
+    text-align:center;
 
-    font-weight: 900;
+    color:#ff4d4d;
 
-    color: white;
+    font-weight:900;
 
-    text-shadow: 0 0 8px #f00;
+    text-shadow:0 3px 8px #000;
 }
 
 /* =========================
    LUTADORES
 ========================= */
 
-#fighters {
-    position: absolute;
-    inset: 0;
+#arena{
+    position:absolute;
 
-    z-index: 4;
+    left:0;
+    right:0;
+    bottom:0;
 
-    pointer-events: none;
+    height:610px;
+
+    z-index:5;
 }
 
-.fighter {
-    position: absolute;
+.fighter{
+    position:absolute;
 
-    bottom: 5%;
+    bottom:28px;
 
-    width: 21%;
-    height: 62%;
+    width:285px;
+    height:455px;
 
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center bottom;
+    background-repeat:no-repeat;
+
+    background-size:100% auto;
+
+    background-position:center 30%;
 
     filter:
-        drop-shadow(0 12px 12px #000);
+        drop-shadow(
+            0 12px 10px
+            rgba(0,0,0,.9)
+        );
 
     transition:
-        left .12s,
-        right .12s,
-        bottom .12s,
-        filter .12s,
-        opacity .25s;
+        left .06s linear,
+        filter .08s,
+        transform .08s;
+
+    overflow:visible;
 }
 
-#f1 {
-    left: 10%;
+#fighter1{
+    left:100px;
 }
 
-#f2 {
-    right: 10%;
-    transform: scaleX(-1);
+#fighter2{
+    left:880px;
+
+    transform:scaleX(-1);
 }
 
-.hit {
+/* SOCOS */
+
+.fighter.punch{
     filter:
-        brightness(1.8)
-        drop-shadow(0 0 25px #ff7b00) !important;
+        brightness(1.7)
+        drop-shadow(
+            0 0 28px
+            #fff36a
+        );
 
-    animation: hit .12s linear;
+    transform:scale(1.08);
 }
 
-@keyframes hit {
-    50% {
-        transform:
-            translateX(12px)
-            scale(1.05);
-    }
+#fighter2.punch{
+    transform:
+        scaleX(-1)
+        scale(1.08);
 }
 
-#f2.hit {
-    animation: hit2 .12s linear;
+/* PERSONAGEM ATINGIDO */
+
+.fighter.hit{
+    animation:hit .18s linear;
 }
 
-@keyframes hit2 {
-    50% {
-        transform:
-            translateX(-12px)
-            scaleX(-1)
-            scale(1.05);
-    }
-}
+@keyframes hit{
 
-.glow {
-    animation: glow .5s infinite alternate;
-
-    filter:
-        brightness(1.8)
-        drop-shadow(0 0 35px #fff700) !important;
-}
-
-@keyframes glow {
-    from {
-        opacity: .75;
+    0%{
+        filter:
+            brightness(2)
+            drop-shadow(
+                0 0 25px
+                #fff
+            );
     }
 
-    to {
-        opacity: 1;
-    }
-}
-
-.fatal {
-    animation: fatal .18s infinite alternate !important;
-
-    filter:
-        brightness(2.2)
-        drop-shadow(0 0 40px red) !important;
-}
-
-@keyframes fatal {
-    from {
-        transform: scale(1);
+    100%{
+        filter:
+            brightness(1)
+            drop-shadow(
+                0 12px 10px
+                #000
+            );
     }
 
-    to {
-        transform: scale(1.12);
-    }
 }
 
-.crouch {
-    height: 50% !important;
-    bottom: 5% !important;
+/* FATALITY */
+
+.fighter.fatal{
+    animation:fatal .14s infinite alternate;
+}
+
+@keyframes fatal{
+
+    from{
+        filter:
+            brightness(1.2)
+            drop-shadow(
+                0 0 15px
+                #fff
+            );
+    }
+
+    to{
+        filter:
+            brightness(3)
+            drop-shadow(
+                0 0 45px
+                red
+            );
+    }
+
 }
 
 /* =========================
-   CONTROLES NA ARENA
+   EFEITOS
 ========================= */
 
-#controls {
-    position: absolute;
+#effects{
+    position:absolute;
 
-    bottom: 1.5%;
-    left: 50%;
+    inset:0;
 
-    transform: translateX(-50%);
+    z-index:30;
 
-    z-index: 8;
+    pointer-events:none;
+}
 
-    color: white;
+.fx{
+    position:absolute;
 
-    text-align: center;
+    width:100px;
+    height:100px;
 
-    font-size: 11px;
+    border-radius:50%;
 
-    text-shadow: 2px 2px 3px #000;
+    border:7px solid #fff;
 
-    opacity: .8;
+    animation:
+        boom
+        .35s
+        ease-out
+        forwards;
+}
 
-    white-space: nowrap;
+@keyframes boom{
+
+    from{
+        transform:scale(.2);
+        opacity:1;
+    }
+
+    to{
+        transform:scale(2.2);
+        opacity:0;
+    }
+
+}
+
+/* =========================
+   CONTROLES
+========================= */
+
+#controls{
+    position:absolute;
+
+    left:50%;
+    bottom:18px;
+
+    transform:translateX(-50%);
+
+    z-index:25;
+
+    padding:8px 15px;
+
+    border-radius:20px;
+
+    background:rgba(0,0,0,.55);
+
+    color:#fff;
+
+    font-size:14px;
+
+    text-align:center;
+}
+
+/* =========================
+   FLASH CARD
+========================= */
+
+#flash{
+    position:absolute;
+
+    inset:0;
+
+    z-index:100;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    flex-direction:column;
+
+    background:rgba(0,0,0,.88);
+
+    padding:20px;
+}
+
+#flash.show{
+    display:flex;
+}
+
+#flash h2{
+    color:#ffd34d;
+
+    text-align:center;
+
+    margin-bottom:10px;
+
+    text-shadow:
+        0 3px 8px #000;
+}
+
+#flash img{
+    max-width:78%;
+    max-height:72%;
+
+    object-fit:contain;
+
+    border:3px solid #ff6b32;
+
+    border-radius:12px;
+
+    box-shadow:
+        0 0 35px
+        rgba(255,90,30,.55);
+}
+
+#flash p{
+    margin-top:12px;
+
+    color:#fff;
+
+    text-align:center;
+
+    font-size:18px;
+
+    font-weight:700;
+}
+
+.flash-buttons{
+    display:flex;
+
+    gap:12px;
+
+    margin-top:12px;
+}
+
+.flash-btn{
+    padding:10px 22px;
+
+    border:0;
+
+    border-radius:8px;
+
+    color:#fff;
+
+    font-weight:900;
+
+    cursor:pointer;
+}
+
+.correct{
+    background:#1bb35b;
+}
+
+.wrong{
+    background:#d93434;
+}
+
+.flip{
+    background:#555;
+}
+
+/* =========================
+   VITÓRIA
+========================= */
+
+#victory{
+    position:absolute;
+
+    inset:0;
+
+    z-index:150;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    flex-direction:column;
+
+    background:rgba(0,0,0,.72);
+
+    color:#fff;
+
+    text-align:center;
+}
+
+#victory h1{
+    font-size:58px;
+
+    color:#ffd34d;
+
+    text-shadow:
+        0 4px 14px #000;
+}
+
+#victory p{
+    font-size:26px;
+
+    margin:12px;
+}
+
+#victory button{
+    padding:12px 22px;
+
+    border:0;
+
+    border-radius:8px;
+
+    background:#ff6b32;
+
+    color:#fff;
+
+    font-weight:900;
+
+    cursor:pointer;
 }
 
 /* =========================
    PAUSA
 ========================= */
 
-#pause {
-    position: absolute;
-    inset: 0;
+#pause{
+    position:absolute;
 
-    background: rgba(0,0,0,.7);
+    inset:0;
 
-    z-index: 20;
+    z-index:90;
 
-    display: none;
+    display:none;
 
-    align-items: center;
-    justify-content: center;
+    align-items:center;
+    justify-content:center;
 
-    color: white;
+    background:rgba(0,0,0,.7);
 
-    font-size: 42px;
+    color:#fff;
 
-    font-weight: 900;
+    font-size:40px;
 
-    text-align: center;
+    font-weight:900;
 }
 
-#pause.show {
-    display: flex;
+#pause.show{
+    display:flex;
 }
 
-/* =========================
-   PERGUNTA
-========================= */
+@media(max-width:900px){
 
-#question {
-    position: absolute;
-    inset: 0;
-
-    background: rgba(0,0,0,.93);
-
-    z-index: 50;
-
-    display: none;
-
-    flex-direction: column;
-
-    align-items: center;
-    justify-content: center;
-
-    color: white;
-
-    padding: 20px;
-}
-
-#question.show {
-    display: flex;
-}
-
-#question h2 {
-    color: #ffd32a;
-
-    margin-bottom: 10px;
-
-    text-align: center;
-}
-
-#question img {
-    width: min(82%,800px);
-    height: min(64%,470px);
-
-    object-fit: contain;
-
-    border: 3px solid #d99b25;
-
-    box-shadow:
-        0 0 28px rgba(255,170,30,.5);
-}
-
-#question p {
-    margin-top: 10px;
-
-    text-align: center;
-
-    font-weight: 700;
-}
-
-#reward {
-    margin-top: 7px;
-
-    color: #8cff68;
-
-    text-align: center;
-
-    min-height: 22px;
-}
-
-#question .q-help {
-    font-size: 12px;
-
-    opacity: .8;
-}
-
-/* =========================
-   RESULTADO
-========================= */
-
-#result {
-    position: absolute;
-    inset: 0;
-
-    background: rgba(0,0,0,.82);
-
-    z-index: 70;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    flex-direction: column;
-
-    color: white;
-}
-
-#result.show {
-    display: flex;
-}
-
-#result h1 {
-    font-size: clamp(30px,6vw,72px);
-
-    color: #ffd22e;
-
-    text-shadow:
-        0 0 18px #ff5a00;
-
-    text-align: center;
-}
-
-#result button {
-    margin-top: 24px;
-
-    padding: 12px 28px;
-
-    background: #222;
-
-    color: white;
-
-    border: 1px solid #ffd22e;
-
-    border-radius: 6px;
-
-    cursor: pointer;
-}
-
-/* =========================
-   AVISOS
-========================= */
-
-#toast {
-    position: absolute;
-
-    left: 50%;
-    top: 18%;
-
-    transform: translateX(-50%);
-
-    z-index: 30;
-
-    color: white;
-
-    font-size: clamp(18px,2.5vw,32px);
-
-    font-weight: 900;
-
-    text-shadow: 0 0 10px #000;
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    text-align: center;
-}
-
-#toast.show {
-    animation: toast 1.3s ease;
-}
-
-@keyframes toast {
-    0% {
-        opacity: 0;
+    #game{
         transform:
-            translate(-50%,20px);
+            scale(
+                calc(
+                    min(
+                        100vw / 1280,
+                        100vh / 720
+                    )
+                )
+            );
     }
 
-    20%,75% {
-        opacity: 1;
-
-        transform:
-            translate(-50%,0);
-    }
-
-    100% {
-        opacity: 0;
-    }
 }
+
 </style>
 </head>
 
@@ -655,2239 +758,2884 @@ html, body {
 
 <div id="game">
 
-<!-- ==================================================
+<!-- =====================================================
      MENU
-================================================== -->
+===================================================== -->
 
 <section id="menu" class="screen active">
 
-<img
-    class="bg"
-    src="WhatsApp Image 2026-08-30 at 16.00.20.jpeg"
-    alt="Menu"
->
+    <div class="menu-buttons">
 
-<div class="overlay">
+        <button
+            class="menu-btn"
+            onclick="startMode('1P')">
+            1 Jogador
+        </button>
 
-<button
-    class="invisible menu-hit m1"
-    onclick="startMode('1P')">
-</button>
+        <button
+            class="menu-btn"
+            onclick="startMode('2P')">
+            2 Jogadores
+        </button>
 
-<button
-    class="invisible menu-hit m2"
-    onclick="startMode('2P')">
-</button>
+        <button
+            class="menu-btn"
+            onclick="openSelection()">
+            Escolher Lutador
+        </button>
 
-<button
-    class="invisible menu-hit m3"
-    onclick="showMessage('Modo treinamento ainda não configurado.')">
-</button>
+        <button
+            class="menu-btn"
+            onclick="toggleRules()">
+            Opções
+        </button>
 
-<button
-    class="invisible menu-hit m4"
-    onclick="openQuestionPreview()">
-</button>
+    </div>
 
-<button
-    class="invisible menu-hit m5"
-    onclick="goSelect()">
-</button>
+    <!-- =================================================
+         OPÇÕES / COMANDOS
+    ================================================== -->
 
-<button
-    class="invisible menu-hit m6"
-    onclick="showMessage('Química Orgânica')">
-</button>
+    <div id="rules">
 
-<button
-    class="invisible menu-hit m7"
-    onclick="openOptions()">
-</button>
+        <h2>
+            COMANDOS E REGRAS
+        </h2>
 
-<button
-    class="invisible menu-hit m8"
-    onclick="showMessage('Para sair, feche a aba do navegador.')">
-</button>
+        <h3>
+            Jogador 1 — teclado
+        </h3>
 
-</div>
+        <ul>
+
+            <li>
+                <b>W / S:</b>
+                mover para frente / trás
+            </li>
+
+            <li>
+                <b>A:</b>
+                soco
+            </li>
+
+            <li>
+                <b>Espaço:</b>
+                pular
+            </li>
+
+            <li>
+                <b>Ctrl:</b>
+                agachar
+            </li>
+
+            <li>
+                <b>Shift:</b>
+                Fatality quando estiver liberado
+            </li>
+
+            <li>
+                <b>C:</b>
+                resposta correta
+            </li>
+
+            <li>
+                <b>E:</b>
+                resposta errada
+            </li>
+
+            <li>
+                <b>D:</b>
+                virar o Flash Card
+            </li>
+
+        </ul>
+
+        <h3>
+            Jogador 2 — teclado
+        </h3>
+
+        <ul>
+
+            <li>
+                <b>← / →:</b>
+                mover
+            </li>
+
+            <li>
+                <b>Enter:</b>
+                soco
+            </li>
+
+            <li>
+                <b>↑:</b>
+                pular
+            </li>
+
+            <li>
+                <b>↓:</b>
+                agachar
+            </li>
+
+            <li>
+                <b>Shift direito:</b>
+                Fatality
+            </li>
+
+        </ul>
+
+        <h3>
+            Manetes
+        </h3>
+
+        <ul>
+
+            <li>
+                Controle 1 usa o primeiro controle conectado.
+            </li>
+
+            <li>
+                Controle 2 usa o segundo controle conectado.
+            </li>
+
+            <li>
+                Analógico esquerdo / D-pad:
+                movimento.
+            </li>
+
+            <li>
+                A / ✕:
+                pular.
+            </li>
+
+            <li>
+                B / ○:
+                agachar.
+            </li>
+
+            <li>
+                X / □:
+                soco.
+            </li>
+
+            <li>
+                Y / △:
+                Fatality.
+            </li>
+
+            <li>
+                No Flash Card:
+                A / ✕ = correto.
+            </li>
+
+            <li>
+                B / ○ = errado.
+            </li>
+
+        </ul>
+
+        <h3>
+            Regras da luta
+        </h3>
+
+        <ul>
+
+            <li>
+                A luta pausa durante a pergunta.
+            </li>
+
+            <li>
+                Os movimentos ficam bloqueados
+                durante o Flash Card.
+            </li>
+
+            <li>
+                A pergunta aparece automaticamente
+                aproximadamente na metade da luta.
+            </li>
+
+            <li>
+                A pergunta é aleatória.
+            </li>
+
+            <li>
+                No modo 1 jogador,
+                somente o jogador humano responde.
+            </li>
+
+            <li>
+                No modo 2 jogadores,
+                qualquer um dos dois pode ser escolhido.
+            </li>
+
+            <li>
+                Acertar gera uma recompensa aleatória:
+                vida extra ou Fatality.
+            </li>
+
+            <li>
+                Errar passa a vantagem para o adversário.
+            </li>
+
+            <li>
+                O Fatality precisa ser ativado
+                pelo comando depois de liberado.
+            </li>
+
+            <li>
+                A luta termina quando a vida de um
+                dos lutadores chega a zero.
+            </li>
+
+        </ul>
+
+    </div>
 
 </section>
 
 
-<!-- ==================================================
+<!-- =====================================================
      SELEÇÃO
-================================================== -->
+===================================================== -->
 
-<section id="select" class="screen">
+<section id="selection" class="screen">
 
-<img
-    class="bg"
-    src="WhatsApp Image 2026-08-29 at 16.05.19.jpeg"
-    alt="Seleção de lutadores"
->
+    <div id="select-title">
+        ESCOLHA SEU LUTADOR
+    </div>
 
-<div
-    class="char-grid"
-    id="charGrid">
-</div>
+    <div id="select-grid"></div>
 
-<button
-    class="invisible back"
-    onclick="showScreen('menu')">
-</button>
+    <div id="select-info">
+        Jogador 1: escolha um personagem
+    </div>
+
+    <button
+        class="menu-btn"
+        style="
+            position:absolute;
+            left:20px;
+            bottom:18px;
+            z-index:30;
+        "
+        onclick="showMenu()">
+
+        Voltar
+
+    </button>
 
 </section>
 
 
-<!-- ==================================================
+<!-- =====================================================
      LUTA
-================================================== -->
+===================================================== -->
 
 <section id="fight" class="screen">
 
-<img
-    id="arena-bg"
-    src="arena fazenda.jfif"
-    alt="Arena Fazenda"
->
+    <!-- HUD -->
 
-<div id="hud">
+    <div id="hud">
 
-<div>
+        <div>
 
-<div
-    id="name1"
-    class="name">
-    JOGADOR 1
-</div>
+            <div
+                class="name"
+                id="name1">
+                JOGADOR 1
+            </div>
 
-<div class="bar">
-<div
-    id="life1"
-    class="fill">
-</div>
-</div>
+            <div class="hp">
 
-</div>
+                <div
+                    id="hp1"
+                    class="hp-fill">
+                </div>
+
+            </div>
+
+        </div>
 
 
-<div id="timer">
-∞
-</div>
+        <div id="timer">
+            90
+        </div>
 
 
-<div>
+        <div>
 
-<div
-    id="name2"
-    class="name right">
-    JOGADOR 2
-</div>
+            <div
+                class="name"
+                id="name2">
+                ROBÔ (IA)
+            </div>
 
-<div
-    class="bar"
-    id="p2bar">
+            <div
+                id="p2hp"
+                class="hp">
 
-<div
-    id="life2"
-    class="fill">
-</div>
+                <div
+                    id="hp2"
+                    class="hp-fill">
+                </div>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</div>
-
-
-<div id="fighters">
-
-<div
-    id="f1"
-    class="fighter">
-</div>
-
-<div
-    id="f2"
-    class="fighter">
-</div>
-
-</div>
+    </div>
 
 
-<div id="toast">
-</div>
+    <!-- ARENA / LUTADORES -->
+
+    <div id="arena">
+
+        <div
+            id="fighter1"
+            class="fighter">
+        </div>
+
+        <div
+            id="fighter2"
+            class="fighter">
+        </div>
+
+    </div>
 
 
-<div id="controls">
+    <!-- EFEITOS -->
 
-P1:
-W/S mover • A soco • Espaço pular • Ctrl agachar • Shift Fatality
-
-|
-
-P2:
-←/→ mover • ↑ pular • ↓ agachar • Numpad 0 soco • Enter Fatality
-
-</div>
+    <div id="effects"></div>
 
 
-<div id="pause">
+    <!-- CONTROLES -->
 
-PAUSADO
+    <div id="controls">
 
-<br>
+        W/S mover • A soco • Espaço pular • Ctrl agachar • Shift Fatality • C/E responder
 
-<small style="font-size:16px">
-Esc para voltar
-</small>
+    </div>
 
-</div>
+
+    <!-- PAUSA -->
+
+    <div id="pause">
+        PAUSADO
+    </div>
+
+
+    <!-- =================================================
+         FLASH CARD
+    ================================================== -->
+
+    <div id="flash">
+
+        <h2 id="flash-title">
+            HORA DA QUÍMICA!
+        </h2>
+
+        <img
+            id="flash-img"
+            src=""
+            alt="Pergunta">
+
+        <p id="flash-help">
+
+            C = ACERTEI •
+            E = ERREI •
+            D = apenas virar a carta
+
+        </p>
+
+        <div class="flash-buttons">
+
+            <button
+                class="flash-btn correct"
+                onclick="answerFlash('correct')">
+
+                C — ACERTEI
+
+            </button>
+
+            <button
+                class="flash-btn wrong"
+                onclick="answerFlash('wrong')">
+
+                E — ERREI
+
+            </button>
+
+            <button
+                class="flash-btn flip"
+                onclick="flipFlash()">
+
+                D — VIRAR
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         VITÓRIA
+    ================================================== -->
+
+    <div id="victory">
+
+        <h1>
+            VITÓRIA!
+        </h1>
+
+        <p id="winnerText"></p>
+
+        <button onclick="showMenu()">
+
+            Voltar ao Menu
+
+        </button>
+
+    </div>
 
 </section>
-
-
-<!-- ==================================================
-     PERGUNTA
-================================================== -->
-
-<div id="question">
-
-<h2 id="qTitle">
-⚡ HORA DA QUÍMICA!
-</h2>
-
-<img
-    id="qImage"
-    src=""
-    alt="Pergunta"
->
-
-<p id="qInstruction">
-Fale a resposta em voz alta.
-</p>
-
-<div id="reward">
-</div>
-
-<p class="q-help">
-
-D ou C = ACERTO • E = ERRO • depois pressione a tecla novamente para voltar à luta
-
-</p>
-
-</div>
-
-
-<!-- ==================================================
-     OPÇÕES
-================================================== -->
-
-<div id="options">
-
-<div class="options-box">
-
-<h1>
-⚙️ OPÇÕES — COMO JOGAR
-</h1>
-
-
-<h2>
-🎮 Jogador 1
-</h2>
-
-<ul>
-
-<li>
-<span class="key">W</span>
-mover para frente
-</li>
-
-<li>
-<span class="key">S</span>
-mover para trás
-</li>
-
-<li>
-<span class="key">A</span>
-desferir soco
-</li>
-
-<li>
-<span class="key">Espaço</span>
-pular
-</li>
-
-<li>
-<span class="key">Ctrl</span>
-agachar
-</li>
-
-<li>
-<span class="key">Shift</span>
-ativar Fatality
-</li>
-
-</ul>
-
-
-<h2>
-🎮 Jogador 2
-</h2>
-
-<ul>
-
-<li>
-<span class="key">←</span>
-/
-<span class="key">→</span>
-mover
-</li>
-
-<li>
-<span class="key">↑</span>
-pular
-</li>
-
-<li>
-<span class="key">↓</span>
-agachar
-</li>
-
-<li>
-<span class="key">Numpad 0</span>
-soco
-</li>
-
-<li>
-<span class="key">Enter</span>
-Fatality
-</li>
-
-</ul>
-
-
-<h2>
-🃏 Flash Card / Pergunta
-</h2>
-
-<p>
-
-Quando a pergunta aparecer,
-a luta fica pausada e nenhum movimento,
-ataque ou Fatality funciona.
-
-</p>
-
-<ul>
-
-<li>
-<span class="key">D</span>
-ou
-<span class="key">C</span>
-=
-resposta certa
-</li>
-
-<li>
-<span class="key">E</span>
-=
-resposta errada
-</li>
-
-<li>
-O primeiro comando mostra o verso do Flash Card.
-</li>
-
-<li>
-Depois do verso, pressione novamente
-D, C ou E para voltar à luta.
-</li>
-
-</ul>
-
-
-<h2>
-🕹️ Controle / Manete
-</h2>
-
-<p>
-Se o navegador reconhecer o controle,
-o jogo tenta utilizar este padrão:
-</p>
-
-<ul>
-
-<li>
-D-pad ou analógico esquerdo:
-←/→ mover
-</li>
-
-<li>
-↓ agachar
-</li>
-
-<li>
-↑ pular
-</li>
-
-<li>
-Botão X:
-soco
-</li>
-
-<li>
-Botão A:
-pular
-</li>
-
-<li>
-Botão B:
-agachar
-</li>
-
-<li>
-Botão Y:
-Fatality
-</li>
-
-<li>
-Durante a pergunta:
-A = certa • B = errada
-</li>
-
-</ul>
-
-
-<p style="margin-top:10px;opacity:.8">
-
-Os nomes dos botões podem mudar conforme o controle.
-Se o seu controle usar outra disposição,
-podemos trocar os comandos no código.
-
-</p>
-
-
-<h2>
-☠️ Fatality
-</h2>
-
-<p>
-
-Um Fatality normal só pode ser usado quando
-a vida do adversário estiver baixa.
-
-Se o jogador ganhar um Fatality no Flash Card,
-ele fica liberado mesmo que a vida do adversário
-esteja alta.
-
-Para executar, pressione o comando de Fatality.
-
-</p>
-
-
-<button
-    class="close-options"
-    onclick="closeOptions()">
-
-VOLTAR
-
-</button>
-
-</div>
-
-</div>
-
-
-<!-- ==================================================
-     RESULTADO
-================================================== -->
-
-<div id="result">
-
-<h1 id="winner">
-</h1>
-
-<button onclick="location.reload()">
-
-Voltar ao menu
-
-</button>
-
-</div>
 
 </div>
 
 
 <script>
 
-/* ==================================================
+/* =====================================================
    ARQUIVOS DO JOGO
-================================================== */
+===================================================== */
 
-const A = {
+const ASSETS = {
 
-menu:
-"WhatsApp Image 2026-08-30 at 16.00.20.jpeg",
+    /* FUNDO DO MENU = IMAGEM 20 */
+    menu:
+        "WhatsApp Image 2026-08-30 at 16.00.20.jpeg",
 
-select:
-"WhatsApp Image 2026-08-29 at 16.05.19.jpeg",
+    /* TELA DE ESCOLHA = IMAGEM 19 */
+    selection:
+        "WhatsApp Image 2026-08-29 at 16.05.19.jpeg",
 
-arena:
-"arena fazenda.jfif",
+    /* ARENA REAL */
+    arena:
+        "arena fazenda.jfif",
 
+    /* PERSONAGENS */
 
-chars: [
+    chars:[
 
-[
-"Fantasma DDT",
-"fantasma ddt.jfif"
-],
+        [
+            "Fantasma DDT",
+            "fantasma ddt.jfif"
+        ],
 
-[
-"Crio-Lindano",
-"CRIO-lindano- O CONGELADOR.jfif"
-],
+        [
+            "Crio-Lindano",
+            "CRIO-lindano- O CONGELADOR.jfif"
+        ],
 
-[
-"Enxofre Sombrio",
-"ENXOFRE SOMBRIO.jfif"
-],
+        [
+            "Enxofre Sombrio",
+            "ENXOFRE SOMBRIO.jfif"
+        ],
 
-[
-"Neuro-Surge",
-"NEUTRO SURGE-SOBRECARGA.jfif"
-],
+        [
+            "Neuro-Surge",
+            "NEUTRO SURGE-SOBRECARGA.jfif"
+        ],
 
-[
-"Phosphorus",
-"PHOSPHORUS.jfif"
-],
+        [
+            "Phosphorus",
+            "PHOSPHORUS.jfif"
+        ],
 
-[
-"Lacertôx",
-"lacertrox.jfif"
-],
+        [
+            "Lacertôx",
+            "lacertrox.jfif"
+        ],
 
-[
-"Carbamask",
-"carbamask.jfif"
-],
+        [
+            "Carbamask",
+            "carbamask.jfif"
+        ],
 
-[
-"Carbonilhawk",
-"carbonilhawk.jfif"
-],
+        [
+            "Carbonilhawk",
+            "carbonilhawk.jfif"
+        ],
 
-[
-"Aldi-Carb",
-"aldi-carb-inibidor.jfif"
-],
+        [
+            "Aldi-Carb",
+            "aldi-carb-inibidor.jfif"
+        ],
 
-[
-"Pyrethrix",
-"pyrethrix.jfif"
-],
+        [
+            "Pyrethrix",
+            "pyrethrix.jfif"
+        ],
 
-[
-"Cybermeth",
-"cybermeth.jfif"
-],
+        [
+            "Cybermeth",
+            "cybermeth.jfif"
+        ],
 
-[
-"Peltastorm",
-"peltastorm.jfif"
-]
+        [
+            "Peltastorm",
+            "peltastorm.jfif"
+        ]
 
-],
+    ],
 
+    /* FLASH CARDS */
 
-questions: {
+    questions:{
 
-1: [
-"pergunta 1-frente.jfif",
-"pergunta 1-verso.jfif"
-],
+        1:[
+            "pergunta 1-frente.jfif",
+            "pergunta 1-verso.jfif"
+        ],
 
-2: [
-"pergunta 2-frente.jfif",
-"pergunta 2-verso.jfif"
-],
+        2:[
+            "pergunta 2-frente.jfif",
+            "pergunta 2-verso.jfif"
+        ],
 
-3: [
-"pergunta 3- frente.jfif",
-"pergunta 3- verso.jfif"
-],
+        3:[
+            "pergunta 3- frente.jfif",
+            "pergunta 3- verso.jfif"
+        ],
 
-4: [
-"pergunta 4- frente.jfif",
-"pergunta 4- verso.jfif"
-],
+        4:[
+            "pergunta 4-frente.jfif",
+            "pergunta 4- verso.jfif"
+        ],
 
-5: [
-"pergunta 5- frente.jfif",
-"pergunta 5- verso.jfif"
-]
+        5:[
+            "pergunta 5- frente.jfif",
+            "pergunta 5- verso.jfif"
+        ]
 
-}
-
-};
-
-
-/* ==================================================
-   ESTADO DO JOGO
-================================================== */
-
-const state = {
-
-mode: "1P",
-
-p1: null,
-p2: null,
-
-p1Life: 100,
-p2Life: 100,
-
-x1: 12,
-x2: 67,
-
-y1: 0,
-y2: 0,
-
-paused: false,
-question: false,
-
-qNum: null,
-qAnswered: false,
-qActor: null,
-
-fatal1: false,
-fatal2: false,
-
-questionTriggered: false,
-
-damageDone: 0,
-
-gameOver: false,
-
-crouch1: false,
-crouch2: false
+    }
 
 };
 
 
-/* ==================================================
-   SONS
-================================================== */
+/* =====================================================
+   VARIÁVEIS
+===================================================== */
 
-function audio(type) {
+const $ = id =>
+    document.getElementById(id);
 
-try {
+let mode = "1P";
 
-const C =
-window.AudioContext ||
-window.webkitAudioContext;
+let selectionStep = 1;
 
-if (!C) return;
 
-if (!window.ac)
-window.ac = new C();
+/* JOGADOR 1 */
 
-if (ac.state === "suspended")
-ac.resume();
+let p1 = {
 
-const o =
-ac.createOscillator();
+    name:"Jogador 1",
 
-const g =
-ac.createGain();
+    img:
+        ASSETS.chars[0][1],
 
-o.connect(g);
-g.connect(ac.destination);
+    x:150,
 
-const now =
-ac.currentTime;
+    hp:100,
 
-const data = {
+    jump:false,
 
-click: [440,.08,.08],
+    crouch:false,
 
-hit: [120,.12,.15],
-
-correct: [660,.25,.2],
-
-wrong: [180,.25,.18],
-
-fatal: [70,.65,.35],
-
-win: [520,.5,.2],
-
-jump: [280,.12,.10],
-
-hurt: [95,.16,.14]
+    fatal:false
 
 };
 
-const d =
-data[type] ||
-data.click;
 
-o.frequency.setValueAtTime(
-d[0],
-now
-);
+/* JOGADOR 2 / IA */
 
-g.gain.setValueAtTime(
-d[2],
-now
-);
+let p2 = {
 
-o.frequency.exponentialRampToValueAtTime(
-Math.max(40,d[0]*.6),
-now+d[1]
-);
+    name:"Robô (IA)",
 
-g.gain.exponentialRampToValueAtTime(
-.001,
-now+d[1]
-);
+    img:
+        ASSETS.chars[5][1],
 
-o.start();
+    x:850,
 
-o.stop(
-now+d[1]
-);
+    hp:100,
 
-}
+    jump:false,
 
-catch(e) {}
+    crouch:false,
 
-}
+    fatal:false
+
+};
 
 
-/* ==================================================
-   TELAS
-================================================== */
+let running = false;
 
-function showScreen(id) {
+let paused = false;
 
-document
-.querySelectorAll(".screen")
-.forEach(
-x => x.classList.remove("active")
-);
+let flashOpen = false;
 
-document
-.getElementById(id)
-.classList.add("active");
+let flashFace = "front";
 
-}
+let questionOwner = 1;
 
+let questionNumber = 1;
 
-function showMessage(text) {
+let questionAnswered = false;
 
-audio("click");
+let fightTimer = 90;
 
-const el =
-document.getElementById("toast");
+let timerId = null;
 
-el.textContent = text;
+let aiId = null;
 
-el.classList.remove("show");
+let questionTimer = null;
 
-void el.offsetWidth;
+let audioCtx = null;
 
-el.classList.add("show");
-
-}
+let previousPad = [{},{}];
 
 
-function openOptions() {
+/* =====================================================
+   SOM
+===================================================== */
 
-audio("click");
+function ensureAudio(){
 
-document
-.getElementById("options")
-.classList.add("show");
+    if(!audioCtx){
+
+        audioCtx =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+    }
+
+    if(audioCtx.state === "suspended"){
+
+        audioCtx.resume();
+
+    }
 
 }
 
 
-function closeOptions() {
+function sound(type){
 
-audio("click");
+    try{
 
-document
-.getElementById("options")
-.classList.remove("show");
+        ensureAudio();
 
-}
+        const now =
+            audioCtx.currentTime;
 
+        const o =
+            audioCtx.createOscillator();
 
-function startMode(mode) {
+        const g =
+            audioCtx.createGain();
 
-audio("click");
+        o.connect(g);
 
-state.mode = mode;
-
-state.p1 = null;
-state.p2 = null;
-
-goSelect();
-
-}
+        g.connect(
+            audioCtx.destination
+        );
 
 
-function goSelect() {
+        const map = {
 
-showScreen("select");
+            click:[420,.08],
 
-renderChars();
+            hit:[110,.18],
 
-}
+            jump:[520,.10],
 
+            correct:[760,.25],
 
-/* ==================================================
-   SELEÇÃO DOS PERSONAGENS
-================================================== */
+            wrong:[160,.28],
 
-function renderChars() {
+            fatal:[55,.65],
 
-const grid =
-document.getElementById("charGrid");
+            win:[880,.45]
 
-grid.innerHTML = "";
-
-A.chars.forEach(
-(c,i) => {
-
-const button =
-document.createElement("button");
-
-button.className =
-"char-hit";
-
-button.title =
-c[0];
-
-button.onclick =
-() => choose(i);
-
-grid.appendChild(button);
-
-}
-);
-
-}
+        };
 
 
-function choose(i) {
+        const data =
+            map[type] || map.click;
 
-audio("click");
+        const f = data[0];
 
-
-/* PRIMEIRO JOGADOR */
-
-if (!state.p1) {
-
-state.p1 = i;
+        const d = data[1];
 
 
-/* MODO 1 JOGADOR */
-
-if (state.mode === "1P") {
-
-state.p2 =
-randomOpponent(i);
-
-beginFight();
-
-}
+        o.frequency.setValueAtTime(
+            f,
+            now
+        );
 
 
-/* MODO 2 JOGADORES */
+        if(type === "correct"){
 
-else {
+            o.frequency.exponentialRampToValueAtTime(
+                1100,
+                now+d
+            );
 
-showMessage(
-"Jogador 1 escolhido. Agora escolha o Jogador 2."
-);
-
-}
-
-return;
-
-}
+        }
 
 
-/* SEGUNDO JOGADOR */
+        if(type === "wrong"){
 
-if (
-state.mode === "2P" &&
-!state.p2
-) {
+            o.frequency.exponentialRampToValueAtTime(
+                70,
+                now+d
+            );
 
-if (i === state.p1) {
+        }
 
-showMessage(
-"Escolha outro lutador para o Jogador 2."
-);
 
-return;
+        if(type === "fatal"){
 
-}
+            o.frequency.exponentialRampToValueAtTime(
+                28,
+                now+d
+            );
 
-state.p2 = i;
+        }
 
-beginFight();
 
-}
+        g.gain.setValueAtTime(
+            .12,
+            now
+        );
+
+
+        g.gain.exponentialRampToValueAtTime(
+            .001,
+            now+d
+        );
+
+
+        o.start(now);
+
+        o.stop(
+            now+d
+        );
+
+    }catch(e){}
 
 }
 
 
-function randomOpponent(exclude) {
+/* =====================================================
+   TROCA DE TELA
+===================================================== */
 
-let n =
-Math.floor(
-Math.random() *
-A.chars.length
-);
+function showScreen(id){
 
-if (n === exclude)
-n =
-(n+1) %
-A.chars.length;
+    document
+        .querySelectorAll(".screen")
+        .forEach(
+            s =>
+                s.classList.remove("active")
+        );
 
-return n;
-
-}
-
-
-/* ==================================================
-   COMEÇAR LUTA
-================================================== */
-
-function beginFight() {
-
-Object.assign(
-state,
-{
-
-p1Life:100,
-p2Life:100,
-
-x1:12,
-x2:67,
-
-y1:0,
-y2:0,
-
-question:false,
-
-questionTriggered:false,
-
-damageDone:0,
-
-gameOver:false,
-
-fatal1:false,
-fatal2:false,
-
-paused:false,
-
-crouch1:false,
-crouch2:false
-
-}
-);
-
-
-document
-.getElementById("name1")
-.textContent =
-A.chars[state.p1][0];
-
-
-document
-.getElementById("name2")
-.textContent =
-
-state.mode === "1P"
-
-?
-
-A.chars[state.p2][0] +
-" (IA)"
-
-:
-
-A.chars[state.p2][0];
-
-
-document
-.getElementById("f1")
-.style.backgroundImage =
-
-url("${A.chars[state.p1][1]}");
-
-
-document
-.getElementById("f2")
-.style.backgroundImage =
-
-url("${A.chars[state.p2][1]}");
-
-
-updateFight();
-
-showScreen("fight");
-
-audio("win");
+    $(id)
+        .classList
+        .add("active");
 
 }
 
 
-/* ==================================================
-   ATUALIZAR LUTA
-================================================== */
+/* =====================================================
+   MENU
+===================================================== */
 
-function updateFight() {
+function showMenu(){
 
-document
-.getElementById("life1")
-.style.width =
-Math.max(
-0,
-state.p1Life
-) + "%";
+    stopFight();
 
+    $("rules").style.display =
+        "none";
 
-document
-.getElementById("life2")
-.style.width =
-Math.max(
-0,
-state.p2Life
-) + "%";
+    showScreen("menu");
 
-
-const f1 =
-document.getElementById("f1");
-
-const f2 =
-document.getElementById("f2");
-
-
-f1.style.left =
-state.x1 + "%";
-
-
-f1.style.bottom =
-(5 + state.y1/8) + "%";
-
-
-f2.style.right =
-(100 - state.x2 - 21) + "%";
-
-
-f2.style.bottom =
-(5 + state.y2/8) + "%";
-
-
-f1.classList.toggle(
-"crouch",
-state.crouch1
-);
-
-
-f2.classList.toggle(
-"crouch",
-state.crouch2
-);
+    $("game").style.backgroundImage =
+        `url("${ASSETS.menu}")`;
 
 }
 
 
-/* ==================================================
-   SOCO
-================================================== */
+function toggleRules(){
 
-function attack(player) {
+    sound("click");
 
-if (
-state.question ||
-state.paused ||
-state.gameOver
-)
-return;
-
-
-audio("hit");
-
-
-const attacker =
-document.getElementById(
-player === 1 ? "f1" : "f2"
-);
-
-
-const target =
-player === 1 ? 2 : 1;
-
-
-attacker.classList.add("hit");
-
-
-setTimeout(
-() =>
-attacker.classList.remove("hit"),
-140
-);
-
-
-const damage =
-8 +
-Math.floor(
-Math.random()*7
-);
-
-
-if (target === 2)
-
-state.p2Life =
-Math.max(
-0,
-state.p2Life-damage
-);
-
-else
-
-state.p1Life =
-Math.max(
-0,
-state.p1Life-damage
-);
-
-
-state.damageDone +=
-damage;
-
-
-updateFight();
-
-
-if (
-state.p1Life <= 0 ||
-state.p2Life <= 0
-) {
-
-endFight(
-state.p1Life <= 0
-? 2
-: 1
-);
-
-return;
+    $("rules").style.display =
+        $("rules").style.display === "block"
+        ? "none"
+        : "block";
 
 }
 
 
-checkQuestion();
+/* =====================================================
+   MODOS
+===================================================== */
+
+function startMode(m){
+
+    sound("click");
+
+    mode = m;
+
+    selectionStep = 1;
+
+
+    p1 = {
+
+        name:"Jogador 1",
+
+        img:
+            ASSETS.chars[0][1],
+
+        x:150,
+
+        hp:100,
+
+        jump:false,
+
+        crouch:false,
+
+        fatal:false
+
+    };
+
+
+    p2 = {
+
+        name:
+            m === "1P"
+            ? "Robô (IA)"
+            : "Jogador 2",
+
+        img:
+            ASSETS.chars[5][1],
+
+        x:850,
+
+        hp:100,
+
+        jump:false,
+
+        crouch:false,
+
+        fatal:false
+
+    };
+
+
+    openSelection();
 
 }
 
 
-/* ==================================================
-   PERGUNTA ALEATÓRIA
-================================================== */
+/* =====================================================
+   SELEÇÃO
+===================================================== */
 
-function checkQuestion() {
+function openSelection(){
 
-if (
-state.questionTriggered
-)
-return;
+    sound("click");
 
-
-const ratio =
-state.damageDone / 200;
+    $("selection").style.backgroundImage =
+        `url("${ASSETS.selection}")`;
 
 
-if (
-ratio >= .42 &&
-Math.random() < .45
-) {
+    selectionStep = 1;
 
-openQuestion();
+
+    if(mode === "1P"){
+
+        $("select-title").textContent =
+            "ESCOLHA SEU LUTADOR";
+
+        $("select-info").textContent =
+            "Escolha um personagem";
+
+    }else{
+
+        $("select-title").textContent =
+            "JOGADOR 1 — ESCOLHA SEU LUTADOR";
+
+        $("select-info").textContent =
+            "Jogador 1: escolha um personagem";
+
+    }
+
+
+    showScreen("selection");
 
 }
 
-else if (
-ratio >= .58
-) {
 
-openQuestion();
+/* =====================================================
+   CRIA AS ÁREAS INVISÍVEIS DAS CARTAS
+===================================================== */
+
+function buildSelection(){
+
+    const grid =
+        $("select-grid");
+
+    grid.innerHTML = "";
+
+
+    ASSETS.chars.forEach(
+        (character,index)=>{
+
+            const b =
+                document.createElement("button");
+
+            b.className =
+                "char-hit";
+
+            b.title =
+                character[0];
+
+            b.setAttribute(
+                "aria-label",
+                character[0]
+            );
+
+
+            b.onclick =
+                () =>
+                    chooseChar(index);
+
+
+            grid.appendChild(b);
+
+        }
+    );
 
 }
 
+
+/* =====================================================
+   ESCOLHER PERSONAGEM
+===================================================== */
+
+function chooseChar(i){
+
+    sound("click");
+
+
+    const c =
+        ASSETS.chars[i];
+
+
+    /* PRIMEIRO JOGADOR */
+
+    if(selectionStep === 1){
+
+        p1.name =
+            c[0];
+
+        p1.img =
+            c[1];
+
+
+        /* MODO 1 JOGADOR */
+
+        if(mode === "1P"){
+
+            let choices =
+                ASSETS.chars.filter(
+                    (_,n)=>
+                        n !== i
+                );
+
+
+            const ai =
+                choices[
+                    Math.floor(
+                        Math.random() *
+                        choices.length
+                    )
+                ];
+
+
+            p2.name =
+                "Robô (IA) — " +
+                ai[0];
+
+            p2.img =
+                ai[1];
+
+
+            startFight();
+
+
+        }
+
+        /* MODO 2 JOGADORES */
+
+        else{
+
+            selectionStep = 2;
+
+
+            $("select-title").textContent =
+                "JOGADOR 2 — ESCOLHA SEU LUTADOR";
+
+
+            $("select-info").textContent =
+                "Jogador 2: escolha um personagem diferente";
+
+        }
+
+
+    }
+
+    /* SEGUNDO JOGADOR */
+
+    else{
+
+        if(c[1] === p1.img){
+
+            $("select-info").textContent =
+                "Escolha outro personagem para o Jogador 2.";
+
+            return;
+
+        }
+
+
+        p2.name =
+            c[0];
+
+        p2.img =
+            c[1];
+
+
+        startFight();
+
+    }
+
 }
 
 
-/* ==================================================
+/* =====================================================
+   INICIAR LUTA
+===================================================== */
+
+function startFight(){
+
+    sound("click");
+
+    running = true;
+
+    paused = false;
+
+    flashOpen = false;
+
+    flashFace = "front";
+
+    fightTimer = 90;
+
+
+    p1.hp = 100;
+
+    p2.hp = 100;
+
+
+    p1.x = 160;
+
+    p2.x = 850;
+
+
+    p1.fatal = false;
+
+    p2.fatal = false;
+
+
+    $("name1").textContent =
+        p1.name;
+
+    $("name2").textContent =
+        p2.name;
+
+
+    $("hp1").style.width =
+        "100%";
+
+    $("hp2").style.width =
+        "100%";
+
+
+    $("fighter1").style.backgroundImage =
+        `url("${p1.img}")`;
+
+    $("fighter2").style.backgroundImage =
+        `url("${p2.img}")`;
+
+
+    $("fighter1").style.left =
+        p1.x + "px";
+
+    $("fighter2").style.left =
+        p2.x + "px";
+
+
+    $("fighter1").style.opacity =
+        1;
+
+    $("fighter2").style.opacity =
+        1;
+
+
+    $("message").style.display =
+        "none";
+
+
+    $("victory").style.display =
+        "none";
+
+
+    $("flash")
+        .classList
+        .remove("show");
+
+
+    /*
+       FUNDO DA LUTA
+       AGORA COM O NOME CORRETO:
+       arena fazenda.jfif
+    */
+
+    $("game").style.backgroundImage =
+        `url("${ASSETS.arena}")`;
+
+
+    showScreen("fight");
+
+
+    clearInterval(timerId);
+
+    clearInterval(aiId);
+
+    clearTimeout(questionTimer);
+
+
+    /*
+       CRONÔMETRO
+    */
+
+    timerId =
+        setInterval(()=>{
+
+            if(
+                !running ||
+                paused ||
+                flashOpen
+            ){
+                return;
+            }
+
+
+            fightTimer--;
+
+            $("timer").textContent =
+                Math.max(
+                    0,
+                    fightTimer
+                );
+
+
+            if(fightTimer <= 0){
+
+                endFight(
+                    p1.hp >= p2.hp
+                    ? 1
+                    : 2
+                );
+
+            }
+
+        },1000);
+
+
+    /*
+       IA
+    */
+
+    if(mode === "1P"){
+
+        aiId =
+            setInterval(
+                aiThink,
+                220
+            );
+
+    }
+
+
+    /*
+       PERGUNTA:
+       APROXIMADAMENTE NO MEIO DA LUTA
+    */
+
+    questionTimer =
+        setTimeout(
+            scheduleQuestion,
+            40000 +
+            Math.random()*10000
+        );
+
+
+    requestAnimationFrame(
+        gameLoop
+    );
+
+}
+
+
+/* =====================================================
+   FINALIZAR LUTA
+===================================================== */
+
+function endFight(winner){
+
+    if(!running){
+        return;
+    }
+
+
+    running = false;
+
+    clearInterval(timerId);
+
+    clearInterval(aiId);
+
+    clearTimeout(questionTimer);
+
+
+    timerId =
+        null;
+
+    aiId =
+        null;
+
+    questionTimer =
+        null;
+
+
+    flashOpen = false;
+
+    paused = false;
+
+
+    $("flash")
+        .classList
+        .remove("show");
+
+
+    const name =
+        winner === 1
+        ? p1.name
+        : p2.name;
+
+
+    $("winnerText").textContent =
+        name + " venceu!";
+
+
+    $("victory").style.display =
+        "flex";
+
+
+    sound("win");
+
+}
+
+
+/* =====================================================
+   PARAR LUTA
+===================================================== */
+
+function stopFight(){
+
+    running = false;
+
+    clearInterval(timerId);
+
+    clearInterval(aiId);
+
+    clearTimeout(questionTimer);
+
+
+    timerId = null;
+
+    aiId = null;
+
+    questionTimer = null;
+
+}
+
+
+/* =====================================================
+   PERGUNTA
+===================================================== */
+
+function scheduleQuestion(){
+
+    if(
+        !running ||
+        flashOpen
+    ){
+        return;
+    }
+
+
+    /*
+       MODO 1P:
+       SEMPRE O HUMANO RESPONDE.
+    */
+
+    if(mode === "1P"){
+
+        questionOwner = 1;
+
+    }
+
+    /*
+       MODO 2P:
+       ALEATÓRIO
+    */
+
+    else{
+
+        questionOwner =
+            Math.random() < .5
+            ? 1
+            : 2;
+
+    }
+
+
+    openFlash();
+
+}
+
+
+/* =====================================================
    ABRIR FLASH CARD
-================================================== */
+===================================================== */
 
-function openQuestionPreview() {
+function openFlash(){
 
-showMessage(
-"A pergunta aparece automaticamente durante a luta."
-);
-
-}
-
-
-function openQuestion() {
-
-if (
-state.question ||
-state.gameOver
-)
-return;
+    if(
+        !running ||
+        flashOpen
+    ){
+        return;
+    }
 
 
-state.question = true;
+    paused = true;
 
-state.qAnswered = false;
+    flashOpen = true;
 
+    flashFace = "front";
 
-state.qNum =
-1 +
-Math.floor(
-Math.random()*5
-);
+    questionAnswered = false;
 
 
-state.qActor =
-Math.random() < .5
-? 1
-: 2;
+    questionNumber =
+        Math.floor(
+            Math.random()*5
+        ) + 1;
 
 
-const q =
-A.questions[state.qNum];
+    const ownerName =
+        questionOwner === 1
+        ? p1.name
+        : p2.name;
 
 
-const actorName =
-A.chars[
-state.qActor === 1
-? state.p1
-: state.p2
-][0];
+    $("flash-title").textContent =
+        "HORA DA QUÍMICA — " +
+        ownerName;
 
 
-document
-.getElementById("qTitle")
-.textContent =
-"⚡ HORA DA QUÍMICA! Responde: "
-+
-actorName;
+    $("flash-img").src =
+        ASSETS
+            .questions[
+                questionNumber
+            ][0];
 
 
-document
-.getElementById("qImage")
-.src =
-q[0];
+    $("flash-help").textContent =
+        "C = ACERTEI • E = ERREI • D = apenas virar a carta";
 
 
-document
-.getElementById("qInstruction")
-.textContent =
-"Fale a resposta em voz alta. D/C = CERTO • E = ERRADO.";
+    $("flash")
+        .classList
+        .add("show");
 
 
-document
-.getElementById("reward")
-.textContent =
-"";
-
-
-document
-.getElementById("question")
-.classList.add("show");
-
-
-state.questionTriggered = true;
-
-audio("click");
+    sound("click");
 
 }
 
 
-/* ==================================================
-   RESPONDER PERGUNTA
-================================================== */
+/* =====================================================
+   VIRAR FLASH CARD
+===================================================== */
 
-function answer(correct) {
+function flipFlash(){
 
-if (
-!state.question ||
-state.qAnswered
-)
-return;
+    if(!flashOpen){
+        return;
+    }
 
 
-state.qAnswered = true;
-
-audio(
-correct
-? "correct"
-: "wrong"
-);
+    flashFace =
+        flashFace === "front"
+        ? "back"
+        : "front";
 
 
-document
-.getElementById("qImage")
-.src =
-A.questions[state.qNum][1];
+    $("flash-img").src =
+        ASSETS
+            .questions[
+                questionNumber
+            ][
+                flashFace === "front"
+                ? 0
+                : 1
+            ];
 
 
-const winner =
-correct
-
-? state.qActor
-
-: state.qActor === 1
-? 2
-: 1;
-
-
-const reward =
-Math.random() < .5
-? "life"
-: "fatal";
-
-
-const winnerName =
-A.chars[
-winner === 1
-? state.p1
-: state.p2
-][0];
-
-
-if (
-reward === "life"
-) {
-
-if (winner === 1)
-
-state.p1Life =
-Math.min(
-100,
-state.p1Life + 25
-);
-
-else
-
-state.p2Life =
-Math.min(
-100,
-state.p2Life + 25
-);
-
-
-document
-.getElementById("reward")
-.textContent =
-"🏆 "
-+
-winnerName
-+
-" ganhou +25 de vida!";
+    sound("click");
 
 }
 
 
-else {
+/* =====================================================
+   RESPONDER FLASH CARD
+===================================================== */
 
-if (winner === 1)
-state.fatal1 = true;
+function answerFlash(result){
 
-else
-state.fatal2 = true;
+    if(
+        !flashOpen ||
+        questionAnswered
+    ){
+        return;
+    }
 
 
-document
-.getElementById("reward")
-.textContent =
-"☠️ "
-+
-winnerName
-+
-" ganhou um FATALITY! Use o comando de Fatality.";
+    questionAnswered = true;
+
+    flashFace = "back";
+
+
+    $("flash-img").src =
+        ASSETS
+            .questions[
+                questionNumber
+            ][1];
+
+
+    /*
+       SE ACERTOU:
+       O PRÓPRIO JOGADOR GANHA.
+
+       SE ERROU:
+       O ADVERSÁRIO GANHA.
+    */
+
+    const winner =
+        result === "correct"
+        ? questionOwner
+        : (
+            questionOwner === 1
+            ? 2
+            : 1
+        );
+
+
+    /*
+       PRÊMIO ALEATÓRIO:
+       VIDA OU FATALITY
+    */
+
+    const prize =
+        Math.random() < .5
+        ? "life"
+        : "fatal";
+
+
+    if(result === "correct"){
+
+        sound("correct");
+
+    }else{
+
+        sound("wrong");
+
+    }
+
+
+    if(winner === 1){
+
+        if(prize === "life"){
+
+            p1.hp =
+                Math.min(
+                    100,
+                    p1.hp +
+                    (
+                        result === "correct"
+                        ? 25
+                        : 20
+                    )
+                );
+
+        }else{
+
+            p1.fatal = true;
+
+        }
+
+    }else{
+
+        if(prize === "life"){
+
+            p2.hp =
+                Math.min(
+                    100,
+                    p2.hp +
+                    (
+                        result === "correct"
+                        ? 25
+                        : 20
+                    )
+                );
+
+        }else{
+
+            p2.fatal = true;
+
+        }
+
+    }
+
+
+    const winnerName =
+        winner === 1
+        ? p1.name
+        : p2.name;
+
+
+    if(result === "correct"){
+
+        if(prize === "life"){
+
+            $("flash-help").textContent =
+                winnerName +
+                " acertou e ganhou +25 de vida!";
+
+        }else{
+
+            $("flash-help").textContent =
+                winnerName +
+                " acertou e ganhou FATALITY! " +
+                "Pressione Shift quando quiser usar.";
+
+        }
+
+    }else{
+
+        if(prize === "life"){
+
+            $("flash-help").textContent =
+                "Resposta errada. " +
+                winnerName +
+                " ganhou +20 de vida!";
+
+        }else{
+
+            $("flash-help").textContent =
+                "Resposta errada. " +
+                winnerName +
+                " ganhou FATALITY! " +
+                "Pressione Shift quando quiser usar.";
+
+        }
+
+    }
+
+
+    updateHp();
+
+
+    /*
+       VOLTA AUTOMATICAMENTE PARA A LUTA
+    */
+
+    setTimeout(
+        closeFlash,
+        1300
+    );
 
 }
 
 
-document
-.getElementById("qTitle")
-.textContent =
+/* =====================================================
+   FECHAR FLASH CARD
+===================================================== */
 
-(
-correct
+function closeFlash(){
 
-?
-
-"✅ RESPOSTA CERTA! "
-
-:
-
-"❌ RESPOSTA ERRADA! "
-
-)
-+
-winnerName
-+
-" ganhou.";
+    if(!flashOpen){
+        return;
+    }
 
 
-document
-.getElementById("qInstruction")
-.textContent =
-
-"O verso foi revelado. Pressione D, C ou E novamente para voltar à luta.";
+    $("flash")
+        .classList
+        .remove("show");
 
 
-updateFight();
+    flashOpen = false;
+
+    paused = false;
 
 }
 
 
-/* ==================================================
-   FECHAR PERGUNTA
-================================================== */
+/* =====================================================
+   VIDA
+===================================================== */
 
-function closeQuestion() {
+function updateHp(){
 
-if (
-!state.qAnswered
-)
-return;
-
-
-state.question = false;
-
-
-document
-.getElementById("question")
-.classList.remove("show");
+    p1.hp =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                p1.hp
+            )
+        );
 
 
-audio("click");
-
-}
-
-
-/* ==================================================
-   FATALITY
-================================================== */
-
-function fatality(player) {
-
-if (
-state.question ||
-state.paused ||
-state.gameOver
-)
-return;
+    p2.hp =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                p2.hp
+            )
+        );
 
 
-const granted =
-player === 1
-? state.fatal1
-: state.fatal2;
+    $("hp1").style.width =
+        p1.hp + "%";
 
 
-const target =
-player === 1
-? 2
-: 1;
+    $("hp2").style.width =
+        p2.hp + "%";
 
 
-const targetLife =
-target === 1
-? state.p1Life
-: state.p2Life;
-
-
-/*
-   Se não ganhou Fatality no Flash Card,
-   precisa deixar o adversário com pouca vida.
-*/
-
-if (
-!granted &&
-targetLife > 30
-) {
-
-showMessage(
-"Fatality só pode ser usado com a vida do adversário baixa ou após ganhar um Fatality no Flash Card."
-);
-
-return;
+    gameOverCheck();
 
 }
 
 
-if (player === 1)
-state.fatal1 = false;
+/* =====================================================
+   VERIFICAR FIM
+===================================================== */
 
-else
-state.fatal2 = false;
+function gameOverCheck(){
 
+    if(p1.hp <= 0){
 
-const attacker =
-document.getElementById(
-player === 1
-? "f1"
-: "f2"
-);
+        endFight(2);
 
+        return true;
 
-const targetElement =
-document.getElementById(
-target === 1
-? "f1"
-: "f2"
-);
+    }
 
 
-attacker.classList.add(
-"fatal"
-);
+    if(p2.hp <= 0){
+
+        endFight(1);
+
+        return true;
+
+    }
 
 
-audio("fatal");
-
-
-if (target === 1)
-
-state.p1Life = 0;
-
-else
-
-state.p2Life = 0;
-
-
-updateFight();
-
-
-setTimeout(
-() =>
-targetElement.style.opacity = ".08",
-250
-);
-
-
-setTimeout(
-() =>
-endFight(player),
-700
-);
+    return false;
 
 }
 
 
-/* ==================================================
+/* =====================================================
+   DISTÂNCIA PARA GOLPE
+===================================================== */
+
+function canHit(
+    attacker,
+    target
+){
+
+    return (
+        Math.abs(
+            attacker.x -
+            target.x
+        ) < 310
+    );
+
+}
+
+
+/* =====================================================
+   SOCO
+===================================================== */
+
+function punch(player){
+
+    if(
+        !running ||
+        paused ||
+        flashOpen
+    ){
+        return;
+    }
+
+
+    const self =
+        player === 1
+        ? p1
+        : p2;
+
+
+    const enemy =
+        player === 1
+        ? p2
+        : p1;
+
+
+    /*
+       SE ESTIVER MUITO LONGE,
+       O GOLPE NÃO ACERTA.
+    */
+
+    if(
+        !canHit(
+            self,
+            enemy
+        )
+    ){
+        return;
+    }
+
+
+    sound("hit");
+
+
+    const attackerElement =
+        player === 1
+        ? $("fighter1")
+        : $("fighter2");
+
+
+    const enemyElement =
+        player === 1
+        ? $("fighter2")
+        : $("fighter1");
+
+
+    attackerElement
+        .classList
+        .add("punch");
+
+
+    enemyElement
+        .classList
+        .add("hit");
+
+
+    spawnFx(
+        enemy.x + 120,
+        360
+    );
+
+
+    setTimeout(()=>{
+
+        attackerElement
+            .classList
+            .remove("punch");
+
+
+        enemyElement
+            .classList
+            .remove("hit");
+
+    },180);
+
+
+    /*
+       DANO REAL
+    */
+
+    enemy.hp -= 10;
+
+
+    updateHp();
+
+}
+
+
+/* =====================================================
    PULO
-================================================== */
+===================================================== */
 
-function jump(player) {
+function jump(player){
 
-if (
-state.question ||
-state.paused ||
-state.gameOver
-)
-return;
-
-
-if (player === 1)
-state.y1 = 80;
-
-else
-state.y2 = 80;
+    if(
+        !running ||
+        paused ||
+        flashOpen
+    ){
+        return;
+    }
 
 
-updateFight();
-
-audio("jump");
-
-
-setTimeout(
-() => {
-
-if (player === 1)
-state.y1 = 0;
-
-else
-state.y2 = 0;
+    const f =
+        player === 1
+        ? p1
+        : p2;
 
 
-updateFight();
+    const el =
+        player === 1
+        ? $("fighter1")
+        : $("fighter2");
 
-},
-300
-);
+
+    if(f.jump){
+        return;
+    }
+
+
+    f.jump = true;
+
+
+    sound("jump");
+
+
+    el.style.bottom =
+        "120px";
+
+
+    setTimeout(()=>{
+
+        el.style.bottom =
+            "28px";
+
+        f.jump = false;
+
+    },360);
 
 }
 
 
-/* ==================================================
+/* =====================================================
    AGACHAR
-================================================== */
+===================================================== */
 
-function crouch(player,on) {
+function crouch(
+    player,
+    on
+){
 
-if (
-state.question ||
-state.paused ||
-state.gameOver
-)
-return;
-
-
-if (player === 1)
-state.crouch1 = on;
-
-else
-state.crouch2 = on;
+    if(
+        !running ||
+        paused ||
+        flashOpen
+    ){
+        return;
+    }
 
 
-updateFight();
+    const f =
+        player === 1
+        ? p1
+        : p2;
+
+
+    const el =
+        player === 1
+        ? $("fighter1")
+        : $("fighter2");
+
+
+    f.crouch = on;
+
+
+    el.style.filter =
+        on
+        ? "brightness(.85)"
+        : "";
 
 }
 
 
-/* ==================================================
+/* =====================================================
    MOVIMENTO
-================================================== */
+===================================================== */
 
-function move(player,dir) {
+function move(
+    player,
+    dir
+){
 
-if (
-state.question ||
-state.paused ||
-state.gameOver
-)
-return;
-
-
-if (player === 1)
-
-state.x1 =
-Math.max(
-2,
-Math.min(
-45,
-state.x1 + dir*1.7
-)
-);
-
-else
-
-state.x2 =
-Math.max(
-52,
-Math.min(
-90,
-state.x2 + dir*1.7
-)
-);
+    if(
+        !running ||
+        paused ||
+        flashOpen
+    ){
+        return;
+    }
 
 
-updateFight();
-
-}
-
-
-/* ==================================================
-   FIM DA LUTA
-================================================== */
-
-function endFight(winner) {
-
-if (
-state.gameOver
-)
-return;
+    const f =
+        player === 1
+        ? p1
+        : p2;
 
 
-state.gameOver = true;
-
-audio("win");
-
-
-const name =
-A.chars[
-winner === 1
-? state.p1
-: state.p2
-][0];
+    f.x =
+        Math.max(
+            30,
+            Math.min(
+                965,
+                f.x +
+                dir * 16
+            )
+        );
 
 
-document
-.getElementById("winner")
-.textContent =
-name +
-" VENCEU";
+    const el =
+        player === 1
+        ? $("fighter1")
+        : $("fighter2");
 
 
-document
-.getElementById("result")
-.classList.add("show");
+    el.style.left =
+        f.x + "px";
 
 }
 
 
-/* ==================================================
-   TECLADO
-================================================== */
+/* =====================================================
+   FATALITY
+===================================================== */
 
-window.addEventListener(
-"keydown",
-e => {
+function fatality(player){
 
-const k =
-e.key.toLowerCase();
-
-
-if (
-[
-" ",
-"arrowup",
-"arrowdown",
-"arrowleft",
-"arrowright"
-]
-.includes(k)
-)
-
-e.preventDefault();
+    if(
+        !running ||
+        paused ||
+        flashOpen
+    ){
+        return;
+    }
 
 
-/*
-   PERGUNTA
-*/
+    const self =
+        player === 1
+        ? p1
+        : p2;
 
-if (state.question) {
 
-if (!state.qAnswered) {
+    const enemy =
+        player === 1
+        ? p2
+        : p1;
 
-if (
-k === "d" ||
-k === "c"
-) {
 
-answer(true);
+    /*
+       PRECISA TER GANHADO
+       O FATALITY.
+    */
 
-return;
+    if(!self.fatal){
+
+        return;
+
+    }
+
+
+    /*
+       PRECISA ESTAR PERTO
+       DO ADVERSÁRIO.
+    */
+
+    if(
+        !canHit(
+            self,
+            enemy
+        )
+    ){
+
+        return;
+
+    }
+
+
+    self.fatal = false;
+
+
+    sound("fatal");
+
+
+    const attacker =
+        player === 1
+        ? $("fighter1")
+        : $("fighter2");
+
+
+    const enemyElement =
+        player === 1
+        ? $("fighter2")
+        : $("fighter1");
+
+
+    /*
+       BRILHO
+    */
+
+    attacker
+        .classList
+        .add("fatal");
+
+
+    /*
+       ADVERSÁRIO FICA FRACO
+    */
+
+    enemyElement.style.opacity =
+        ".15";
+
+
+    /*
+       EXPLOSÕES
+    */
+
+    for(
+        let i=0;
+        i<7;
+        i++
+    ){
+
+        setTimeout(
+            ()=>{
+
+                spawnFx(
+                    enemy.x +
+                    100 +
+                    Math.random()*100,
+
+                    250 +
+                    Math.random()*220
+                );
+
+            },
+
+            i*90
+        );
+
+    }
+
+
+    /*
+       FATALITY ZERA A VIDA
+    */
+
+    enemy.hp = 0;
+
+
+    updateHp();
+
+
+    setTimeout(()=>{
+
+        attacker
+            .classList
+            .remove("fatal");
+
+    },1200);
+
+}
+
+
+/* =====================================================
+   EFEITO VISUAL
+===================================================== */
+
+function spawnFx(
+    x,
+    y
+){
+
+    const f =
+        document.createElement(
+            "div"
+        );
+
+
+    f.className =
+        "fx";
+
+
+    f.style.left =
+        x + "px";
+
+
+    f.style.top =
+        y + "px";
+
+
+    $("effects")
+        .appendChild(f);
+
+
+    setTimeout(
+        ()=>f.remove(),
+        380
+    );
 
 }
 
 
-if (k === "e") {
-
-answer(false);
-
-return;
-
-}
-
-}
-
-else if (
-
-k === "d" ||
-k === "c" ||
-k === "e" ||
-k === " "
-
-) {
-
-closeQuestion();
-
-return;
-
-}
-
-return;
-
-}
-
-
-/*
-   ESC
-*/
-
-if (k === "escape") {
-
-if (
-document
-.getElementById("fight")
-.classList
-.contains("active")
-) {
-
-state.paused =
-!state.paused;
-
-document
-.getElementById("pause")
-.classList
-.toggle(
-"show",
-state.paused
-);
-
-}
-
-return;
-
-}
-
-
-if (
-!document
-.getElementById("fight")
-.classList
-.contains("active")
-)
-
-return;
-
-
-/*
-   JOGADOR 1
-*/
-
-if (k === "w")
-move(1,1);
-
-else if (k === "s")
-move(1,-1);
-
-else if (k === "a")
-attack(1);
-
-else if (k === " ")
-jump(1);
-
-else if (k === "control")
-crouch(1,true);
-
-else if (k === "shift")
-fatality(1);
-
-
-/*
-   JOGADOR 2
-*/
-
-else if (k === "arrowleft")
-move(2,-1);
-
-else if (k === "arrowright")
-move(2,1);
-
-else if (k === "arrowdown")
-crouch(2,true);
-
-else if (k === "arrowup")
-jump(2);
-
-else if (
-k === "numpad0" ||
-e.code === "Numpad0"
-)
-attack(2);
-
-else if (k === "enter")
-fatality(2);
-
-}
-);
-
-
-/* ==================================================
-   SOLTAR TECLAS
-================================================== */
-
-window.addEventListener(
-"keyup",
-e => {
-
-const k =
-e.key.toLowerCase();
-
-
-if (k === "control")
-crouch(1,false);
-
-
-if (k === "arrowdown")
-crouch(2,false);
-
-}
-);
-
-
-/* ==================================================
-   CONTROLES / MANETES
-================================================== */
-
-let previousPads = {};
-
-
-function gamepadButton(
-pad,
-index
-) {
-
-return !!(
-pad &&
-pad.buttons[index] &&
-pad.buttons[index].pressed
-);
-
-}
-
-
-function gamepadAxis(
-pad,
-index
-) {
-
-return
-pad &&
-pad.axes[index] !== undefined
-? pad.axes[index]
-: 0;
-
-}
-
-
-function pollGamepads() {
-
-const pads =
-navigator.getGamepads
-? navigator.getGamepads()
-: [];
-
-
-pads.forEach(
-(pad,idx) => {
-
-if (!pad)
-return;
-
-
-const prev =
-previousPads[idx] || {};
-
-
-const left =
-gamepadButton(pad,14) ||
-gamepadAxis(pad,0) < -.45;
-
-
-const right =
-gamepadButton(pad,15) ||
-gamepadAxis(pad,0) > .45;
-
-
-const up =
-gamepadButton(pad,12) ||
-gamepadAxis(pad,1) < -.55;
-
-
-const down =
-gamepadButton(pad,13) ||
-gamepadAxis(pad,1) > .55;
-
-
-const edge =
-n =>
-gamepadButton(pad,n) &&
-!prev[n];
-
-
-/*
-   CONTROLE 1
-*/
-
-if (idx === 0) {
-
-if (left)
-move(1,-1);
-
-if (right)
-move(1,1);
-
-if (
-up &&
-!prev.up
-)
-jump(1);
-
-crouch(1,down);
-
-if (edge(2))
-attack(1);
-
-if (edge(0))
-jump(1);
-
-if (edge(1))
-crouch(1,true);
-
-if (edge(3))
-fatality(1);
-
-
-/*
-   PERGUNTA
-*/
-
-if (state.question) {
-
-if (
-!state.qAnswered &&
-edge(0)
-)
-answer(true);
-
-else if (
-!state.qAnswered &&
-edge(1)
-)
-answer(false);
-
-else if (
-state.qAnswered &&
-(
-edge(0) ||
-edge(1)
-)
-)
-closeQuestion();
-
-}
-
-}
-
-
-/*
-   CONTROLE 2
-*/
-
-if (idx === 1) {
-
-if (left)
-move(2,-1);
-
-if (right)
-move(2,1);
-
-if (
-up &&
-!prev.up
-)
-jump(2);
-
-crouch(2,down);
-
-if (edge(2))
-attack(2);
-
-if (edge(0))
-jump(2);
-
-if (edge(1))
-crouch(2,true);
-
-if (edge(3))
-fatality(2);
-
-
-/*
-   PERGUNTA
-*/
-
-if (state.question) {
-
-if (
-!state.qAnswered &&
-edge(0)
-)
-answer(true);
-
-else if (
-!state.qAnswered &&
-edge(1)
-)
-answer(false);
-
-else if (
-state.qAnswered &&
-(
-edge(0) ||
-edge(1)
-)
-)
-closeQuestion();
-
-}
-
-}
-
-
-/*
-   GUARDAR ESTADO
-*/
-
-const current = {};
-
-for (
-let n = 0;
-n < pad.buttons.length;
-n++
-)
-
-current[n] =
-gamepadButton(
-pad,
-n
-);
-
-current.up = up;
-current.down = down;
-
-previousPads[idx] =
-current;
-
-}
-);
-
-
-requestAnimationFrame(
-pollGamepads
-);
-
-}
-
-
-requestAnimationFrame(
-pollGamepads
-);
-
-
-/* ==================================================
+/* =====================================================
    IA
-================================================== */
+===================================================== */
 
-let lastAI = 0;
+function aiThink(){
 
-
-function aiLoop(t) {
-
-if (
-
-state.mode === "1P" &&
-
-document
-.getElementById("fight")
-.classList
-.contains("active") &&
-
-!state.question &&
-
-!state.paused &&
-
-!state.gameOver
-
-) {
-
-if (
-t-lastAI > 850
-) {
-
-lastAI = t;
-
-const r =
-Math.random();
+    if(
+        !running ||
+        paused ||
+        flashOpen
+    ){
+        return;
+    }
 
 
-if (r < .45)
+    /*
+       DISTÂNCIA
+    */
 
-move(
-2,
-Math.random() < .5
-? -1
-: 1
-);
-
-
-else if (r < .82)
-
-attack(2);
+    const d =
+        p1.x -
+        p2.x;
 
 
-else if (r < .93)
+    /*
+       IA SE APROXIMA
+    */
 
-jump(2);
+    if(
+        Math.abs(d) > 230
+    ){
+
+        move(
+            2,
+            d > 0
+            ? 1
+            : -1
+        );
+
+    }
+
+    /*
+       IA ATACA
+    */
+
+    else if(
+        Math.random() < .45
+    ){
+
+        punch(2);
+
+    }
 
 
-else
+    /*
+       IA PULA
+    */
 
-crouch(2,true);
+    if(
+        Math.random() < .08
+    ){
+
+        jump(2);
+
+    }
 
 
-if (
-Math.random() < .06
-)
+    /*
+       IA AGACHA
+    */
 
-fatality(2);
+    if(
+        Math.random() < .05
+    ){
+
+        crouch(
+            2,
+            true
+        );
+
+    }else{
+
+        crouch(
+            2,
+            false
+        );
+
+    }
+
+
+    /*
+       IA PODE USAR FATALITY
+    */
+
+    if(
+        p2.fatal &&
+        p2.hp > 0 &&
+        Math.random() < .03
+    ){
+
+        fatality(2);
+
+    }
 
 }
 
+
+/* =====================================================
+   GAME LOOP
+===================================================== */
+
+function gameLoop(){
+
+    if(!running){
+
+        return;
+
+    }
+
+
+    pollGamepads();
+
+
+    if(
+        !paused &&
+        !flashOpen
+    ){
+
+        $("fighter1").style.left =
+            p1.x + "px";
+
+
+        $("fighter2").style.left =
+            p2.x + "px";
+
+
+        const f1 =
+            $("fighter1");
+
+
+        const f2 =
+            $("fighter2");
+
+
+        /*
+           PERSONAGENS SE VIRAM
+           UM PARA O OUTRO
+        */
+
+        f1.style.transform =
+            p1.x <= p2.x
+            ? "scaleX(1)"
+            : "scaleX(-1)";
+
+
+        f2.style.transform =
+            p2.x >= p1.x
+            ? "scaleX(-1)"
+            : "scaleX(1)";
+
+    }
+
+
+    requestAnimationFrame(
+        gameLoop
+    );
+
 }
 
 
-requestAnimationFrame(
-aiLoop
-);
+/* =====================================================
+   TECLADO
+===================================================== */
+
+function handleKeyDown(e){
+
+    const k =
+        e.key;
+
+
+    if(
+        [
+            " ",
+            "ArrowUp",
+            "ArrowDown",
+            "ArrowLeft",
+            "ArrowRight"
+        ].includes(k)
+    ){
+
+        e.preventDefault();
+
+    }
+
+
+    /*
+       FLASH CARD
+    */
+
+    if(flashOpen){
+
+        if(!questionAnswered){
+
+            /*
+               C = CORRETO
+            */
+
+            if(
+                k.toLowerCase() === "c"
+            ){
+
+                answerFlash(
+                    "correct"
+                );
+
+                return;
+
+            }
+
+
+            /*
+               E = ERRADO
+            */
+
+            if(
+                k.toLowerCase() === "e"
+            ){
+
+                answerFlash(
+                    "wrong"
+                );
+
+                return;
+
+            }
+
+
+            /*
+               D = VIRAR
+            */
+
+            if(
+                k.toLowerCase() === "d"
+            ){
+
+                flipFlash();
+
+                return;
+
+            }
+
+        }
+
+
+        return;
+
+    }
+
+
+    /*
+       ESC
+    */
+
+    if(
+        e.key === "Escape"
+    ){
+
+        showMenu();
+
+        return;
+
+    }
+
+
+    if(
+        !running ||
+        paused
+    ){
+
+        return;
+
+    }
+
+
+    const low =
+        k.toLowerCase();
+
+
+    /* =============================================
+       JOGADOR 1
+    ============================================= */
+
+    if(
+        low === "w"
+    ){
+
+        move(1,1);
+
+    }
+
+    else if(
+        low === "s"
+    ){
+
+        move(1,-1);
+
+    }
+
+    else if(
+        low === "a"
+    ){
+
+        punch(1);
+
+    }
+
+    else if(
+        k === " "
+    ){
+
+        jump(1);
+
+    }
+
+    else if(
+        k === "Control"
+    ){
+
+        crouch(
+            1,
+            true
+        );
+
+    }
+
+    /*
+       SHIFT ESQUERDO = P1
+    */
+
+    else if(
+        e.code === "ShiftLeft" ||
+        (
+            mode === "1P" &&
+            k === "Shift"
+        )
+    ){
+
+        fatality(1);
+
+    }
+
+
+    /* =============================================
+       JOGADOR 2
+    ============================================= */
+
+    if(mode === "2P"){
+
+        if(
+            k === "ArrowRight"
+        ){
+
+            move(2,1);
+
+        }
+
+        else if(
+            k === "ArrowLeft"
+        ){
+
+            move(2,-1);
+
+        }
+
+        else if(
+            k === "ArrowUp"
+        ){
+
+            jump(2);
+
+        }
+
+        else if(
+            k === "ArrowDown"
+        ){
+
+            crouch(
+                2,
+                true
+            );
+
+        }
+
+        else if(
+            k === "Enter"
+        ){
+
+            punch(2);
+
+        }
+
+        /*
+           SHIFT DIREITO = P2
+        */
+
+        else if(
+            e.code === "ShiftRight"
+        ){
+
+            fatality(2);
+
+        }
+
+    }
 
 }
 
 
-requestAnimationFrame(
-aiLoop
-);
+/* =====================================================
+   SOLTAR TECLA
+===================================================== */
+
+function handleKeyUp(e){
+
+    if(
+        e.key === "Control"
+    ){
+
+        crouch(
+            1,
+            false
+        );
+
+    }
 
 
-/* ==================================================
-   CONTROLE CONECTADO
-================================================== */
+    if(
+        e.key === "ArrowDown"
+    ){
+
+        crouch(
+            2,
+            false
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CONTROLE / MANETE
+===================================================== */
+
+function buttonPressed(
+    gp,
+    index
+){
+
+    return !!gp &&
+        !!gp.buttons[index] &&
+        gp.buttons[index].pressed;
+
+}
+
+
+/* =====================================================
+   GAMEPAD
+===================================================== */
+
+function pollGamepads(){
+
+    if(
+        !running ||
+        paused ||
+        flashOpen ||
+        !navigator.getGamepads
+    ){
+
+        return;
+
+    }
+
+
+    /*
+       PEGA OS DOIS PRIMEIROS
+       CONTROLES CONECTADOS
+    */
+
+    const gps =
+        Array
+            .from(
+                navigator.getGamepads()
+            )
+            .filter(Boolean)
+            .slice(0,2);
+
+
+    for(
+        let i=0;
+        i<gps.length;
+        i++
+    ){
+
+        const gp =
+            gps[i];
+
+
+        /*
+           ANALÓGICO ESQUERDO
+        */
+
+        const axisX =
+            Math.abs(
+                gp.axes?.[0] || 0
+            ) > .35
+            ? gp.axes[0]
+            : 0;
+
+
+        if(axisX){
+
+            move(
+                i+1,
+                axisX > 0
+                ? 1
+                : -1
+            );
+
+        }
+
+
+        const now = {};
+
+
+        const pressed =
+            n =>
+                buttonPressed(
+                    gp,
+                    n
+                );
+
+
+        for(
+            let b=0;
+            b<gp.buttons.length;
+            b++
+        ){
+
+            now[b] =
+                pressed(b);
+
+        }
+
+
+        const prev =
+            previousPad[i] || {};
+
+
+        const just =
+            n =>
+                now[n] &&
+                !prev[n];
+
+
+        /*
+           D-PAD
+        */
+
+        if(axisX === 0){
+
+            if(
+                just(14)
+            ){
+
+                move(
+                    i+1,
+                    -1
+                );
+
+            }
+
+
+            if(
+                just(15)
+            ){
+
+                move(
+                    i+1,
+                    1
+                );
+
+            }
+
+        }
+
+
+        /*
+           ↑ / A
+           PULAR
+        */
+
+        if(
+            just(12) ||
+            just(0)
+        ){
+
+            jump(
+                i+1
+            );
+
+        }
+
+
+        /*
+           ↓ / B
+           AGACHAR
+        */
+
+        if(
+            just(13) ||
+            just(1)
+        ){
+
+            crouch(
+                i+1,
+                true
+            );
+
+        }
+
+
+        /*
+           X / QUADRADO
+           SOCO
+        */
+
+        if(
+            just(2)
+        ){
+
+            punch(
+                i+1
+            );
+
+        }
+
+
+        /*
+           Y / TRIÂNGULO
+           FATALITY
+        */
+
+        if(
+            just(3)
+        ){
+
+            fatality(
+                i+1
+            );
+
+        }
+
+
+        previousPad[i] =
+            now;
+
+    }
+
+}
+
+
+/* =====================================================
+   EVENTOS
+===================================================== */
 
 window.addEventListener(
-"gamepadconnected",
-() =>
-showMessage(
-"🎮 Controle conectado!"
-)
+    "keydown",
+    handleKeyDown
 );
+
+window.addEventListener(
+    "keyup",
+    handleKeyUp
+);
+
+
+window.addEventListener(
+    "gamepadconnected",
+    ()=>{
+        sound("click");
+    }
+);
+
+
+/* =====================================================
+   INICIAR
+===================================================== */
+
+buildSelection();
 
 </script>
 
