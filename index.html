@@ -27,18 +27,6 @@
             background-size: cover;
             background-position: center;
         }
-        .menu-btn {
-            position: absolute;
-            background: rgba(255, 87, 34, 0.2); 
-            border: 2px dashed rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            border-radius: 8px;
-            z-index: 50;
-        }
-        .menu-btn:hover {
-            border-color: #ff5722;
-            background: rgba(255, 87, 34, 0.5);
-        }
         .screen {
             position: absolute;
             top: 0;
@@ -54,90 +42,154 @@
         .active {
             display: flex;
         }
+
+        /* Menu Principal com Botões Posicionados na Imagem de Fundo Corretamente */
+        #main-menu {
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 35px;
+        }
+        .menu-botoes-container {
+            display: flex;
+            gap: 12px;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 87, 34, 0.6);
+        }
+        .menu-btn {
+            padding: 10px 18px;
+            background: rgba(255, 87, 34, 0.3); 
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            border-radius: 6px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .menu-btn:hover {
+            border-color: #ff5722;
+            background: rgba(255, 87, 34, 0.8);
+            transform: scale(1.05);
+        }
+
+        /* Regras / Comandos no Menu */
+        #painel-regras {
+            position: absolute;
+            top: 30px;
+            left: 50px;
+            width: 380px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ffcc00;
+            border-radius: 8px;
+            padding: 15px;
+            z-index: 50;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: #ffcc00;
+        }
+        #painel-regras h3 {
+            text-align: center;
+            margin-bottom: 8px;
+            color: #ff5722;
+        }
+        #painel-regras ul {
+            padding-left: 15px;
+            color: #fff;
+        }
+
+        /* Grade de Seleção de Lutadores perfeitamente alinhada com as cartas */
         #char-grid {
             position: absolute;
-            top: 100px;
+            top: 15px;
             width: 100%;
-            height: 520px;
+            height: 610px;
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            padding: 20px 40px;
-            gap: 15px;
+            padding: 20px 45px;
+            gap: 12px;
             z-index: 50;
         }
         .char-slot {
-            background: rgba(0, 0, 0, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
+            background: transparent;
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s;
         }
         .char-slot:hover {
             border-color: #ff5722;
-            transform: scale(1.05);
-            background: rgba(255, 87, 34, 0.4);
+            transform: scale(1.03);
+            background: rgba(255, 87, 34, 0.25);
         }
 
-        /* HUD da Luta */
+        /* HUD da Luta (Estilo Mortal Kombat Clássico) */
         #hud-luta {
             position: absolute;
-            top: 20px;
+            top: 25px;
             width: 100%;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 0 50px;
+            padding: 0 40px;
             z-index: 10;
         }
         .barra-vida-container {
-            width: 400px;
-            height: 30px;
-            background: #333;
+            width: 420px;
+            height: 32px;
+            background: #222;
             border: 3px solid #ffcc00;
-            transform: skewX(-20deg);
+            transform: skewX(-15deg);
             overflow: hidden;
         }
         .barra-vida-fill {
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, #ff0000, #ffcc00);
+            background: linear-gradient(90deg, #00ff00, #ffcc00);
             transition: width 0.3s;
         }
         #timer-box {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: bold;
-            color: #ffcc00;
-            text-shadow: 2px 2px 4px #000;
+            color: #ff0000;
+            text-shadow: 2px 2px 6px #000;
         }
 
-        /* Lutadores na Arena */
+        /* Lutadores na Arena de Corpo Inteiro com Efeitos de Movimento */
         #arena-lutadores {
             position: absolute;
-            bottom: 60px;
+            bottom: 40px;
             width: 100%;
-            height: 400px;
+            height: 480px;
             pointer-events: none;
             z-index: 5;
         }
         .lutador-avatar {
             position: absolute;
             bottom: 0;
-            width: 200px;
-            height: 350px;
+            width: 220px;
+            height: 440px;
             background-size: cover;
             background-position: center;
-            border: 3px solid rgba(255,255,255,0.2);
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));
-            transition: transform 0.1s ease-out;
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.9));
+            transition: transform 0.08s ease-out, filter 0.1s;
+        }
+        
+        /* Efeitos visuais de golpes */
+        .efeito-soco {
+            filter: brightness(1.8) drop-shadow(0 0 20px #ff5722) !important;
+            transform: scale(1.08);
         }
         .fatality-ativo {
-            filter: drop-shadow(0 0 25px #ff0000) brightness(1.5) !important;
-            animation: piscar 0.2s infinite alternate;
+            filter: drop-shadow(0 0 35px #ff0000) brightness(2) !important;
+            animation: piscarFatality 0.15s infinite alternate;
         }
-        @keyframes piscar {
-            from { opacity: 1; }
-            to { opacity: 0.5; }
+        @keyframes piscarFatality {
+            from { opacity: 1; transform: scale(1.1); }
+            to { opacity: 0.4; transform: scale(1.15); }
         }
 
         /* Flash Card Frente e Verso */
@@ -182,14 +234,29 @@
         
         <!-- TELA DO MENU PRINCIPAL -->
         <div id="main-menu" class="screen active">
-            <div class="menu-btn" style="left: 45px; top: 590px; width: 120px; height: 95px;" onclick="iniciarModo('1P')" title="1 Jogador"></div>
-            <div class="menu-btn" style="left: 180px; top: 590px; width: 120px; height: 95px;" onclick="iniciarModo('2P')" title="2 Jogadores"></div>
-            <div class="menu-btn" style="left: 315px; top: 590px; width: 120px; height: 95px;" onclick="alert('Modo Treinamento')" title="Treinamento"></div>
-            <div class="menu-btn" style="left: 450px; top: 590px; width: 120px; height: 95px;" onclick="acionarFlashCard()" title="Perguntas"></div>
-            <div class="menu-btn" style="left: 585px; top: 560px; width: 140px; height: 125px;" onclick="irParaSelecaoLutador()" title="Escolher Lutador"></div>
-            <div class="menu-btn" style="left: 740px; top: 590px; width: 120px; height: 95px;" onclick="alert('Química Orgânica')" title="Química Orgânica"></div>
-            <div class="menu-btn" style="left: 875px; top: 590px; width: 120px; height: 95px;" onclick="alert('Opções')" title="Opções"></div>
-            <div class="menu-btn" style="left: 1010px; top: 590px; width: 120px; height: 95px;" onclick="window.close()" title="Sair"></div>
+            <div id="painel-regras">
+                <h3>📜 COMANDOS E REGRAS DO JOGO</h3>
+                <ul>
+                    <li><b>W / S:</b> Move o lutador para Frente / Trás</li>
+                    <li><b>A:</b> Desferir Soco (Causa dano no oponente)</li>
+                    <li><b>Espaço:</b> Pular</li>
+                    <li><b>Ctrl:</b> Agachar</li>
+                    <li><b>Flash Card (Perguntas):</b> Pressione 'D' (Acertar) ou 'E' (Errar) para ver o verso, ganhar vida e liberar o Fatality!</li>
+                    <li><b>Shift:</b> Ativar Fatality (Após vencer pergunta)</li>
+                    <li><b>Esc:</b> Pausar / Voltar ao Menu</li>
+                </ul>
+            </div>
+
+            <div class="menu-botoes-container">
+                <button class="menu-btn" onclick="iniciarModo('1P')">1 Jogador</button>
+                <button class="menu-btn" onclick="iniciarModo('2P')">2 Jogadores</button>
+                <button class="menu-btn" onclick="alert('Modo Treinamento')">Treinamento</button>
+                <button class="menu-btn" onclick="acionarFlashCard()">Perguntas</button>
+                <button class="menu-btn" onclick="irParaSelecaoLutador()" style="background: #ff5722; border-color: #fff;">Escolher Lutador</button>
+                <button class="menu-btn" onclick="alert('Química Orgânica')">Química Orgânica</button>
+                <button class="menu-btn" onclick="alert('Opções')">Opções</button>
+                <button class="menu-btn" onclick="window.close()">Sair</button>
+            </div>
         </div>
 
         <!-- TELA DE SELEÇÃO DE LUTADOR -->
@@ -208,7 +275,7 @@
                 <div class="char-slot" onclick="selecionarLutador('Cybermeth', 'cybermeth.jfif')"></div>
                 <div class="char-slot" onclick="selecionarLutador('Peltastorm', 'peltastorm.jfif')"></div>
             </div>
-            <div style="position: absolute; bottom: 25px;">
+            <div style="position: absolute; bottom: 15px; z-index: 60;">
                 <button class="btn-acao" onclick="voltarMenu()">Voltar ao Menu</button>
             </div>
         </div>
@@ -217,12 +284,12 @@
         <div id="fight-screen" class="screen" style="background-image: url('arena fazenda.jfjf'); background-size: cover; background-position: center;">
             <div id="hud-luta">
                 <div>
-                    <span id="nome-p1" style="color: #ffcc00; font-weight: bold; text-shadow: 2px 2px 2px #000;">JOGADOR 1</span>
+                    <span id="nome-p1" style="color: #ffcc00; font-weight: bold; text-shadow: 2px 2px 2px #000; font-size: 1.1rem;">JOGADOR 1</span>
                     <div class="barra-vida-container"><div id="vida-p1" class="barra-vida-fill"></div></div>
                 </div>
                 <div id="timer-box">90</div>
                 <div>
-                    <span id="nome-p2" style="color: #ffcc00; font-weight: bold; text-shadow: 2px 2px 2px #000; text-align: right; display: block;">OPONENTE</span>
+                    <span id="nome-p2" style="color: #ffcc00; font-weight: bold; text-shadow: 2px 2px 2px #000; text-align: right; display: block; font-size: 1.1rem;">OPONENTE</span>
                     <div class="barra-vida-container" style="transform: skewX(20deg);"><div id="vida-p2" class="barra-vida-fill"></div></div>
                 </div>
             </div>
@@ -232,7 +299,7 @@
                 <div id="avatar-p2" class="lutador-avatar" style="transform: scaleX(-1);"></div>
             </div>
 
-            <div style="position: absolute; bottom: 20px; z-index: 20; display: flex; gap: 15px;">
+            <div style="position: absolute; bottom: 15px; z-index: 20; display: flex; gap: 15px;">
                 <button class="btn-acao" onclick="acionarFlashCard()">Chamar Pergunta (Flash Card)</button>
                 <button class="btn-acao" style="background: #4caf50;" onclick="ativarFatalityManual()">Ativar Fatality (Shift)</button>
             </div>
@@ -295,7 +362,7 @@
         let fatalityDisponivel = false;
         let perguntaAtualNum = 1;
 
-        let p1X = 150;
+        let p1X = 120;
         let p1Y = 0;
         let p1Agachado = false;
 
@@ -335,8 +402,12 @@
             document.getElementById('fight-screen').classList.add('active');
             document.getElementById('game-container').style.backgroundImage = "url('arena fazenda.jfjf')";
             
-            p1X = 150;
+            p1X = 120;
             p1Y = 0;
+            p1Vida = 100;
+            p2Vida = 100;
+            document.getElementById('vida-p1').style.width = '100%';
+            document.getElementById('vida-p2').style.width = '100%';
             atualizarPosicaoLutador();
         }
 
@@ -355,14 +426,13 @@
             tocarSom('clique');
             turnoJogador = Math.random() > 0.5 ? p1Nome : p2Nome;
 
-            // Sorteia uma pergunta entre 1 e 5 combinando com os arquivos do seu GitHub
             perguntaAtualNum = Math.floor(Math.random() * 5) + 1;
             let arquivoFrente = `pergunta ${perguntaAtualNum}- frente.jfif`;
-            if(perguntaAtualNum === 4) arquivoFrente = "pergunta 4-frente.jfif"; // Tratamento para espaçamento do GitHub
+            if(perguntaAtualNum === 4) arquivoFrente = "pergunta 4-frente.jfif";
 
             document.getElementById('turno-texto').innerText = `⚡ HORA DA QUÍMICA! Responde: ${turnoJogador} ⚡`;
             document.getElementById('img-flashcard').src = arquivoFrente;
-            document.getElementById('instrucao-flash').innerText = "Pressione 'D' ou 'E' para responder e ver o verso!";
+            document.getElementById('instrucao-flash').innerText = "Pressione 'D' (Acertar) ou 'E' (Errar) para ver o verso!";
             
             flashCardAtivo = true;
             visualizandoVerso = false;
@@ -395,13 +465,13 @@
                         document.getElementById('turno-texto').innerText = `✅ RESPOSTA CORRETA! ${turnoJogador} ganhou o prêmio!`;
                         document.getElementById('instrucao-flash').innerText = "Prêmio: Ganhou + Vida & Fatality Liberado! Pressione [ESPAÇO] para voltar à luta.";
                         
-                        p1Vida = Math.min(100, p1Vida + 20);
+                        p1Vida = Math.min(100, p1Vida + 25);
                         document.getElementById('vida-p1').style.width = p1Vida + '%';
                         fatalityDisponivel = true;
                     } else if (key === 'e') {
                         tocarSom('erro');
                         visualizandoVerso = true;
-                        let adversario = (turnoJogador === p1Nome) ? p2Nome : p2Nome;
+                        let adversario = (turnoJogador === p1Nome) ? p2Nome : p1Nome;
                         
                         let arquivoVerso = `pergunta ${perguntaAtualNum}- verso.jfif`;
                         if(perguntaAtualNum === 4) arquivoVerso = "pergunta 4- verso.jfif";
@@ -410,7 +480,7 @@
                         document.getElementById('turno-texto').innerText = `❌ RESPOSTA INCORRETA! O prêmio passou para ${adversario}!`;
                         document.getElementById('instrucao-flash').innerText = "O oponente ganhou vantagem! Pressione [ESPAÇO] para voltar à luta.";
                         
-                        p2Vida = Math.min(100, p2Vida + 20);
+                        p2Vida = Math.min(100, p2Vida + 25);
                         document.getElementById('vida-p2').style.width = p2Vida + '%';
                     }
                 } else {
@@ -424,30 +494,33 @@
             }
 
             if (document.getElementById('fight-screen').classList.contains('active')) {
-                if (key === 'w') {
-                    p1X += 20;
+                let avatarP1 = document.getElementById('avatar-p1');
+                let avatarP2 = document.getElementById('avatar-p2');
+
+                if (key === 'w') { // Frente
+                    p1X += 25;
                     atualizarPosicaoLutador();
-                } else if (key === 's') {
-                    p1X = Math.max(20, p1X - 20);
-                    atualizarPosicaoLupador();
-                } else if (key === 'a') {
+                } else if (key === 's') { // Trás
+                    p1X = Math.max(20, p1X - 25);
+                    atualizarPosicaoLutador();
+                } else if (key === 'a') { // Soco com efeito visual
                     tocarSom('clique');
-                    let avatarP2 = document.getElementById('avatar-p2');
-                    avatarP2.style.transform = 'scaleX(-1) translateX(20px)';
-                    setTimeout(() => { avatarP2.style.transform = 'scaleX(-1) translateX(0)'; }, 150);
-                    p2Vida = Math.max(0, p2Vida - 10);
+                    avatarP1.classList.add('efeito-soco');
+                    setTimeout(() => { avatarP1.classList.remove('efeito-soco'); }, 150);
+
+                    p2Vida = Math.max(0, p2Vida - 12);
                     document.getElementById('vida-p2').style.width = p2Vida + '%';
-                } else if (e.key === ' ') {
-                    p1Y = 80;
+                } else if (e.key === ' ') { // Pular
+                    p1Y = 90;
                     atualizarPosicaoLutador();
                     setTimeout(() => {
                         p1Y = 0;
                         atualizarPosicaoLutador();
                     }, 400);
-                } else if (e.key === 'Control') {
+                } else if (e.key === 'Control') { // Agachar
                     p1Agachado = true;
                     atualizarPosicaoLutador();
-                } else if (e.key === 'Shift' || key === 'shift') {
+                } else if (e.key === 'Shift' || key === 'shift') { // Fatality
                     ativarFatalityManual();
                 }
             }
@@ -467,17 +540,17 @@
                 let avatarP2 = document.getElementById('avatar-p2');
                 
                 avatarP1.classList.add('fatality-ativo');
-                alert("FATALITY ATIVADO! O personagem brilhou e o adversário foi destruído!");
+                alert("FATALITY ATIVADO! O personagem brilhou intensamente e o adversário foi destruído!");
                 
                 p2Vida = 0;
                 document.getElementById('vida-p2').style.width = '0%';
-                avatarP2.style.opacity = '0.1';
+                avatarP2.style.opacity = '0.05';
                 
                 setTimeout(() => {
                     avatarP1.classList.remove('fatality-ativo');
                     avatarP2.style.opacity = '1';
                     fatalityDisponivel = false;
-                }, 2000);
+                }, 2200);
             } else {
                 alert("Fatality Indisponível! Você precisa acertar uma pergunta no Flash Card primeiro para ganhar o direito ao Fatality.");
             }
