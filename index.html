@@ -27,19 +27,15 @@
             background-size: cover;
             background-position: center;
         }
-        /* Botões invisíveis mapeados em cima da imagem do menu (WhatsApp ...20.jpeg) */
         .menu-btn {
             position: absolute;
-            background: rgba(255, 0, 0, 0); /* Mude para 0.2 se quiser enxergar os botões para testar */
-            border: 2px dashed rgba(255, 255, 255, 0);
+            background: rgba(255, 0, 0, 0); 
             cursor: pointer;
         }
         .menu-btn:hover {
-            border-color: #ff5722;
+            border: 2px dashed #ff5722;
             background: rgba(255, 87, 34, 0.2);
         }
-        
-        /* Telas internas */
         .screen {
             position: absolute;
             top: 0;
@@ -55,8 +51,6 @@
         .active {
             display: flex;
         }
-        
-        /* Grade para selecionar os lutadores na tela WhatsApp ...19.jpeg */
         #char-grid {
             position: absolute;
             top: 120px;
@@ -69,8 +63,8 @@
             gap: 15px;
         }
         .char-slot {
-            background: rgba(0, 0, 0, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
@@ -80,10 +74,34 @@
             transform: scale(1.05);
             background: rgba(255, 87, 34, 0.3);
         }
-
-        h1 {
-            color: #ff5722;
-            text-shadow: 2px 2px 4px #000;
+        /* Estilo do Flash Card na Luta */
+        #flashcard-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 100;
+        }
+        .btn-acao {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            background: #ff5722;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: background 0.2s;
+        }
+        .btn-acao:hover {
+            background: #e64a19;
         }
     </style>
 </head>
@@ -92,22 +110,19 @@
     <div id="game-container" style="background-image: url('WhatsApp Image 2026-08-30 at 16.00.20.jpeg');">
         
         <!-- TELA DO MENU PRINCIPAL -->
-        <div id="main-menu" class="screen active" style="width: 100%; height: 100%; position: relative; display: flex;">
-            <!-- Botões organizados na parte inferior da imagem do menu -->
+        <div id="main-menu" class="screen active" style="position: relative; display: flex;">
             <div class="menu-btn" style="left: 65px; top: 620px; width: 110px; height: 80px;" onclick="iniciarModo('1P')"></div>
             <div class="menu-btn" style="left: 195px; top: 620px; width: 110px; height: 80px;" onclick="iniciarModo('2P')"></div>
             <div class="menu-btn" style="left: 325px; top: 620px; width: 110px; height: 80px;" onclick="alert('Modo Treinamento selecionado!')"></div>
-            <div class="menu-btn" style="left: 455px; top: 620px; width: 110px; height: 80px;" onclick="alert('Perguntas de Química Orgânica!')"></div>
+            <div class="menu-btn" style="left: 455px; top: 620px; width: 110px; height: 80px;" onclick="acionarFlashCardDireto()"></div>
             <div class="menu-btn" style="left: 585px; top: 590px; width: 110px; height: 110px;" onclick="irParaSelecaoLutador()"></div>
-            <div class="menu-btn" style="left: 715px; top: 620px; width: 110px; height: 80px;" onclick="alert('Química Orgânica - Informações')"></div>
+            <div class="menu-btn" style="left: 715px; top: 620px; width: 110px; height: 80px;" onclick="alert('Química Orgânica - Regras e Golpes das Classes')"></div>
             <div class="menu-btn" style="left: 845px; top: 620px; width: 110px; height: 80px;" onclick="alert('Opções do Jogo')"></div>
             <div class="menu-btn" style="left: 975px; top: 620px; width: 110px; height: 80px;" onclick="window.close()"></div>
         </div>
 
-        <!-- TELA DE SELEÇÃO DE LUTADOR (Usa a imagem ...19.jpeg) -->
+        <!-- TELA DE SELEÇÃO DE LUTADOR -->
         <div id="character-select" class="screen" style="background-image: url('WhatsApp Image 2026-08-29 at 16.05.19.jpeg'); background-size: cover;">
-            
-            <!-- Grade de cliques invisível em cima dos 12 cards de personagens da imagem -->
             <div id="char-grid">
                 <div class="char-slot" onclick="selecionarLutador('Fantasma DDT')"></div>
                 <div class="char-slot" onclick="selecionarLutador('Crio-Lindano')"></div>
@@ -119,21 +134,33 @@
                 <div class="char-slot" onclick="selecionarLutador('Carbonilhawk')"></div>
                 <div class="char-slot" onclick="selecionarLutador('Aldi-Carb')"></div>
                 <div class="char-slot" onclick="selecionarLutador('Pyrethrix')"></div>
-                <div class="char-slot" onclick="selecionarLutador('Cybermeth')}}"></div>
+                <div class="char-slot" onclick="selecionarLutador('Cybermeth')"></div>
                 <div class="char-slot" onclick="selecionarLutador('Peltastorm')"></div>
             </div>
-
             <div style="position: absolute; bottom: 15px;">
-                <button onclick="voltarMenu()" style="padding: 8px 16px; cursor: pointer; background: #ff5722; color: #fff; border: none; border-radius: 4px; font-weight: bold;">Voltar ao Menu</button>
+                <button class="btn-acao" onclick="voltarMenu()">Voltar ao Menu</button>
             </div>
         </div>
 
         <!-- TELA DE LUTA -->
-        <div id="fight-screen" class="screen">
-            <h1 id="fight-title">Combate Iniciado</h1>
-            <p id="fight-info" style="margin-top: 10px;">Preparando a arena...</p>
+        <div id="fight-screen" class="screen" style="background: linear-gradient(to bottom, #111, #222);">
+            <h1 id="fight-title" style="color: #ff5722; text-shadow: 2px 2px 4px #000;">Combate Iniciado</h1>
+            <p id="fight-info" style="margin-top: 10px; font-size: 1.2rem;">Pressione o botão abaixo para chamar o Flash Card de Química!</p>
             <br>
-            <button onclick="voltarMenu()" style="padding: 10px 20px; cursor: pointer; background: #ff5722; color: #fff; border: none; border-radius: 5px;">Encerrar / Voltar</button>
+            <div style="display: flex; gap: 15px;">
+                <button class="btn-acao" onclick="acionarFlashCardDireto()">Chamar Pergunta / Flash Card</button>
+                <button class="btn-acao" style="background: #444;" onclick="voltarMenu()">Encerrar Luta</button>
+            </div>
+        </div>
+
+        <!-- CAMADA DO FLASH CARD (PERGUNTA NA HORA DA LUTA) -->
+        <div id="flashcard-overlay">
+            <h2 id="jogador-da-vez" style="color: #ffcc00; margin-bottom: 15px; text-shadow: 2px 2px 4px #000;">Vez de: Jogador 1</h2>
+            <img id="img-pergunta" src="pergunta 4.jpg" style="max-height: 500px; border: 3px solid #ff5722; border-radius: 8px; box-shadow: 0 0 20px rgba(255,87,34,0.5);">
+            <div style="margin-top: 20px; display: flex; gap: 20px;">
+                <button class="btn-acao" style="background: #4caf50;" onclick="responderFlashCard(true)">Acertou! (+ Recompensa)</button>
+                <button class="btn-acao" style="background: #f44336;" onclick="responderFlashCard(false)">Errou! (Vai para o Adversário)</button>
+            </div>
         </div>
 
     </div>
@@ -141,6 +168,7 @@
     <script>
         let modoAtual = '1P';
         let jogador1Escolhido = null;
+        let turnoJogador = "Jogador 1";
 
         function irParaSelecaoLutador() {
             document.getElementById('main-menu').classList.remove('active');
@@ -150,12 +178,12 @@
         function voltarMenu() {
             document.getElementById('character-select').classList.remove('active');
             document.getElementById('fight-screen').classList.remove('active');
+            document.getElementById('flashcard-overlay').style.display = 'none';
             document.getElementById('main-menu').classList.add('active');
         }
 
         function iniciarModo(modo) {
             modoAtual = modo;
-            // Se clicar direto em 1P ou 2P, já manda pra seleção de lutador com o modo salvo
             irParaSelecaoLutador();
         }
 
@@ -165,19 +193,40 @@
             document.getElementById('fight-screen').classList.add('active');
             
             if(modoAtual === '1P') {
-                document.getElementById('fight-title').innerText = "Modo 1 Jogador: " + nomeLutador + " vs Robô (IA)";
-                document.getElementById('fight-info').innerText = "O bot de inteligência artificial está pronto para o combate!";
+                document.getElementById('fight-title').innerText = nomeLutador + " vs Robô (IA)";
+                document.getElementById('fight-info').innerText = "Modo 1 Jogador ativo. O robô está controlando o oponente.";
             } else {
-                document.getElementById('fight-title').innerText = "Modo 2 Jogadores: " + nomeLutador + " (P1) vs Oponente (P2)";
-                document.getElementById('fight-info').innerText = "Controles de teclado e manetes ativados.";
+                document.getElementById('fight-title').innerText = nomeLutador + " (P1) vs Oponente (P2)";
+                document.getElementById('fight-info').innerText = "Modo 2 Jogadores ativo.";
             }
         }
 
-        // Detecção de controles/manetes USB ou Bluetooth conectados
-        window.addEventListener("gamepadconnected", (e) => {
-            console.log("Gamepad conectado:", e.gamepad.id);
-            alert("Controle conectado: " + e.gamepad.id);
-        });
+        function acionarFlashCardDireto() {
+            // Sorteia quem vai responder a pergunta da rodada
+            let rand = Math.random();
+            if (modoAtual === '1P') {
+                turnoJogador = rand > 0.5 ? (jogador1Escolhido || "Jogador 1") : "Robô (IA)";
+            } else {
+                turnoJogador = rand > 0.5 ? "Jogador 1" : "Jogador 2";
+            }
+
+            // Atualiza o texto na tela do flash card
+            document.getElementById('jogador-da-vez').innerText = "⚡ HORA DA QUÍMICA! Quem responde: " + turnoJogador + " ⚡";
+            
+            // Exibe a camada do flash card por cima da luta
+            document.getElementById('flashcard-overlay').style.display = 'flex';
+        }
+
+        function responderFlashCard(acertou) {
+            if (acertou) {
+                alert("Parabéns, " + turnoJogador + "! Resposta Correta. Recompensa aplicada (+1 Vida / Força máxima)!");
+            } else {
+                let adversario = (turnoJogador === "Jogador 1" || turnoJogador === jogador1Escolhido) ? "o Adversário" : (jogador1Escolhido || "Jogador 1");
+                alert("Que pena, " + turnoJogador + " errou! A bonificação de recompensa foi desviada para " + adversario + "!");
+            }
+            // Fecha o flash card e retorna para a luta
+            document.getElementById('flashcard-overlay').style.display = 'none';
+        }
     </script>
 </body>
 </html>
