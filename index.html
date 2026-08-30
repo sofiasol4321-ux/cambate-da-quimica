@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Combate da Química</title>
+    <title>Combate da Química - Versão Definitiva</title>
     <style>
         * {
             margin: 0;
@@ -27,7 +27,6 @@
             background-size: cover;
             background-position: center;
         }
-        /* Botões do Menu principais devidamente posicionados e testáveis */
         .menu-btn {
             position: absolute;
             background: rgba(255, 87, 34, 0.2); 
@@ -80,7 +79,7 @@
             background: rgba(255, 87, 34, 0.4);
         }
 
-        /* HUD da Luta (Estilo Mortal Kombat) */
+        /* HUD da Luta */
         #hud-luta {
             position: absolute;
             top: 20px;
@@ -103,6 +102,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, #ff0000, #ffcc00);
+            transition: width 0.3s;
         }
         #timer-box {
             font-size: 2.5rem;
@@ -114,36 +114,53 @@
         /* Lutadores na Arena */
         #arena-lutadores {
             position: absolute;
-            bottom: 80px;
+            bottom: 60px;
             width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 150px;
-            align-items: flex-end;
+            height: 400px;
+            pointer-events: none;
             z-index: 5;
         }
         .lutador-avatar {
-            width: 220px;
-            height: 380px;
+            position: absolute;
+            bottom: 0;
+            width: 200px;
+            height: 350px;
             background-size: cover;
             background-position: center;
             border: 3px solid rgba(255,255,255,0.2);
             filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));
+            transition: transform 0.1s ease-out;
+        }
+        .fatality-ativo {
+            filter: drop-shadow(0 0 25px #ff0000) brightness(1.5) !important;
+            animation: piscar 0.2s infinite alternate;
+        }
+        @keyframes piscar {
+            from { opacity: 1; }
+            to { opacity: 0.5; }
         }
 
-        /* Flash Card */
+        /* Flash Card Frente e Verso */
         #flashcard-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.92);
             display: none;
             justify-content: center;
             align-items: center;
             flex-direction: column;
             z-index: 100;
+        }
+        #img-flashcard {
+            max-height: 520px;
+            max-width: 900px;
+            border: 3px solid #ff5722;
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(255,87,34,0.6);
+            object-fit: contain;
         }
         .btn-acao {
             padding: 12px 25px;
@@ -159,9 +176,9 @@
         }
     </style>
 </head>
-<body onkeydown="controlarTeclado(event)">
+<body onkeydown="tratarTeclado(event)" onkeyup="tratarSolucaoTecla(event)">
 
-    <div id="game-container" style="background-image: url('WhatsApp Image 2026-08-30 at 16.00.20.jpeg');">
+    <div id="game-container" style="background-image: url('imagem menu.jpg');">
         
         <!-- TELA DO MENU PRINCIPAL -->
         <div id="main-menu" class="screen active">
@@ -176,7 +193,7 @@
         </div>
 
         <!-- TELA DE SELEÇÃO DE LUTADOR -->
-        <div id="character-select" class="screen" style="background-image: url('WhatsApp Image 2026-08-29 at 16.05.19.jpeg'); background-size: cover;">
+        <div id="character-select" class="screen" style="background-image: url('imagem menu.jpg'); background-size: cover;">
             <div id="char-grid">
                 <div class="char-slot" onclick="selecionarLutador('Fantasma DDT', 'fantasma ddt.jfif')"></div>
                 <div class="char-slot" onclick="selecionarLutador('Crio-Lindano', 'CRIO-lindano- O CONGELADOR.jfif')"></div>
@@ -196,7 +213,7 @@
             </div>
         </div>
 
-        <!-- TELA DE LUTA (ARENA FAZENDA) -->
+        <!-- TELA DE LUTA -->
         <div id="fight-screen" class="screen" style="background-image: url('arena fazenda.jfjf'); background-size: cover; background-position: center;">
             <div id="hud-luta">
                 <div>
@@ -215,16 +232,17 @@
                 <div id="avatar-p2" class="lutador-avatar" style="transform: scaleX(-1);"></div>
             </div>
 
-            <div style="position: absolute; bottom: 20px; z-index: 20;">
+            <div style="position: absolute; bottom: 20px; z-index: 20; display: flex; gap: 15px;">
                 <button class="btn-acao" onclick="acionarFlashCard()">Chamar Pergunta (Flash Card)</button>
+                <button class="btn-acao" style="background: #4caf50;" onclick="ativarFatalityManual()">Ativar Fatality (Shift)</button>
             </div>
         </div>
 
-        <!-- FLASH CARD -->
+        <!-- FLASH CARD FRENTE E VERSO -->
         <div id="flashcard-overlay">
             <h2 id="turno-texto" style="color: #ffcc00; margin-bottom: 10px; text-shadow: 2px 2px 4px #000;"></h2>
-            <img id="img-flashcard" src="pergunta 4.jpg" style="max-height: 520px; border: 3px solid #ff5722; border-radius: 8px; box-shadow: 0 0 25px rgba(255,87,34,0.6);">
-            <p id="instrucao-flash" style="margin-top: 15px; color: #fff; font-size: 1.1rem; text-shadow: 1px 1px 2px #000;">Pressione 'D' para Acertar ou 'E' para Errar!</p>
+            <img id="img-flashcard" src="">
+            <p id="instrucao-flash" style="margin-top: 15px; color: #fff; font-size: 1.1rem; text-shadow: 1px 1px 2px #000; text-align: center;"></p>
         </div>
 
     </div>
@@ -255,6 +273,12 @@
                 gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            } else if(tipo === 'fatality') {
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.6);
+                gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.6);
             }
         }
 
@@ -262,9 +286,18 @@
         let p1Nome = "Jogador 1";
         let p2Nome = "Robô (IA)";
         let p1AvatarImg = "fantasma ddt.jfif";
+        let p2AvatarImg = "lacertrox.jfif";
         let turnoJogador = "";
         let flashCardAtivo = false;
         let visualizandoVerso = false;
+        let p1Vida = 100;
+        let p2Vida = 100;
+        let fatalityDisponivel = false;
+        let perguntaAtualNum = 1;
+
+        let p1X = 150;
+        let p1Y = 0;
+        let p1Agachado = false;
 
         function irParaSelecaoLutador() {
             tocarSom('clique');
@@ -278,7 +311,7 @@
             document.getElementById('fight-screen').classList.remove('active');
             document.getElementById('flashcard-overlay').style.display = 'none';
             document.getElementById('main-menu').classList.add('active');
-            document.getElementById('game-container').style.backgroundImage = "url('WhatsApp Image 2026-08-30 at 16.00.20.jpeg')";
+            document.getElementById('game-container').style.backgroundImage = "url('imagem menu.jpg')";
         }
 
         function iniciarModo(modo) {
@@ -296,54 +329,157 @@
             document.getElementById('nome-p1').innerText = p1Nome;
             document.getElementById('nome-p2').innerText = p2Nome;
             document.getElementById('avatar-p1').style.backgroundImage = `url('${p1AvatarImg}')`;
-            document.getElementById('avatar-p2').style.backgroundImage = `url('lacertrox.jfif')`;
+            document.getElementById('avatar-p2').style.backgroundImage = `url('${p2AvatarImg}')`;
 
             document.getElementById('character-select').classList.remove('active');
             document.getElementById('fight-screen').classList.add('active');
             document.getElementById('game-container').style.backgroundImage = "url('arena fazenda.jfjf')";
+            
+            p1X = 150;
+            p1Y = 0;
+            atualizarPosicaoLutador();
+        }
+
+        function atualizarPosicaoLutador() {
+            let avatar = document.getElementById('avatar-p1');
+            avatar.style.left = p1X + 'px';
+            avatar.style.bottom = p1Y + 'px';
+            if (p1Agachado) {
+                avatar.style.transform = 'scaleY(0.6)';
+            } else {
+                avatar.style.transform = 'scaleY(1)';
+            }
         }
 
         function acionarFlashCard() {
             tocarSom('clique');
-            let rand = Math.random();
-            if (modoAtual === '1P') {
-                turnoJogador = rand > 0.5 ? p1Nome : p2Nome;
-            } else {
-                turnoJogador = rand > 0.5 ? "Jogador 1" : "Jogador 2";
-            }
+            turnoJogador = Math.random() > 0.5 ? p1Nome : p2Nome;
+
+            // Sorteia uma pergunta entre 1 e 5 combinando com os arquivos do seu GitHub
+            perguntaAtualNum = Math.floor(Math.random() * 5) + 1;
+            let arquivoFrente = `pergunta ${perguntaAtualNum}- frente.jfif`;
+            if(perguntaAtualNum === 4) arquivoFrente = "pergunta 4-frente.jfif"; // Tratamento para espaçamento do GitHub
 
             document.getElementById('turno-texto').innerText = `⚡ HORA DA QUÍMICA! Responde: ${turnoJogador} ⚡`;
-            document.getElementById('img-flashcard').src = "pergunta 4.jpg";
-            document.getElementById('instrucao-flash').innerText = "Pressione 'D' se acertou ou 'E' se errou!";
+            document.getElementById('img-flashcard').src = arquivoFrente;
+            document.getElementById('instrucao-flash').innerText = "Pressione 'D' ou 'E' para responder e ver o verso!";
             
             flashCardAtivo = true;
             visualizandoVerso = false;
             document.getElementById('flashcard-overlay').style.display = 'flex';
         }
 
-        function controlarTeclado(e) {
-            if (!flashCardAtivo) return;
+        function tratarTeclado(e) {
+            let key = e.key.toLowerCase();
 
-            if (!visualizandoVerso) {
-                if (e.key.toLowerCase() === 'd') {
-                    tocarSom('acerto');
-                    visualizandoVerso = true;
-                    document.getElementById('turno-texto').innerText = `✅ RESPOSTA CORRETA! ${turnoJogador} ganhou o prêmio!`;
-                    document.getElementById('instrucao-flash').innerText = "Pressione [ESPAÇO] para voltar à luta.";
-                } else if (e.key.toLowerCase() === 'e') {
-                    tocarSom('erro');
-                    visualizandoVerso = true;
-                    let adversario = (turnoJogador === p1Nome || turnoJogador === "Jogador 1") ? p2Nome : p1Nome;
-                    document.getElementById('turno-texto').innerText = `❌ RESPOSTA INCORRETA! O prêmio passou para ${adversario}!`;
-                    document.getElementById('instrucao-flash').innerText = "Pressione [ESPAÇO] para voltar à luta.";
-                }
-            } else {
-                if (e.key === ' ') {
-                    tocarSom('clique');
+            if (e.key === 'Escape') {
+                if (flashCardAtivo) {
                     document.getElementById('flashcard-overlay').style.display = 'none';
-                    flashCardAtivo5 = false;
                     flashCardAtivo = false;
+                } else {
+                    voltarMenu();
                 }
+                return;
+            }
+
+            if (flashCardAtivo) {
+                if (!visualizandoVerso) {
+                    if (key === 'd') {
+                        tocarSom('acerto');
+                        visualizandoVerso = true;
+                        
+                        let arquivoVerso = `pergunta ${perguntaAtualNum}- verso.jfif`;
+                        if(perguntaAtualNum === 4) arquivoVerso = "pergunta 4- verso.jfif";
+                        
+                        document.getElementById('img-flashcard').src = arquivoVerso;
+                        document.getElementById('turno-texto').innerText = `✅ RESPOSTA CORRETA! ${turnoJogador} ganhou o prêmio!`;
+                        document.getElementById('instrucao-flash').innerText = "Prêmio: Ganhou + Vida & Fatality Liberado! Pressione [ESPAÇO] para voltar à luta.";
+                        
+                        p1Vida = Math.min(100, p1Vida + 20);
+                        document.getElementById('vida-p1').style.width = p1Vida + '%';
+                        fatalityDisponivel = true;
+                    } else if (key === 'e') {
+                        tocarSom('erro');
+                        visualizandoVerso = true;
+                        let adversario = (turnoJogador === p1Nome) ? p2Nome : p2Nome;
+                        
+                        let arquivoVerso = `pergunta ${perguntaAtualNum}- verso.jfif`;
+                        if(perguntaAtualNum === 4) arquivoVerso = "pergunta 4- verso.jfif";
+
+                        document.getElementById('img-flashcard').src = arquivoVerso;
+                        document.getElementById('turno-texto').innerText = `❌ RESPOSTA INCORRETA! O prêmio passou para ${adversario}!`;
+                        document.getElementById('instrucao-flash').innerText = "O oponente ganhou vantagem! Pressione [ESPAÇO] para voltar à luta.";
+                        
+                        p2Vida = Math.min(100, p2Vida + 20);
+                        document.getElementById('vida-p2').style.width = p2Vida + '%';
+                    }
+                } else {
+                    if (e.key === ' ') {
+                        tocarSom('clique');
+                        document.getElementById('flashcard-overlay').style.display = 'none';
+                        flashCardAtivo = false;
+                    }
+                }
+                return;
+            }
+
+            if (document.getElementById('fight-screen').classList.contains('active')) {
+                if (key === 'w') {
+                    p1X += 20;
+                    atualizarPosicaoLutador();
+                } else if (key === 's') {
+                    p1X = Math.max(20, p1X - 20);
+                    atualizarPosicaoLupador();
+                } else if (key === 'a') {
+                    tocarSom('clique');
+                    let avatarP2 = document.getElementById('avatar-p2');
+                    avatarP2.style.transform = 'scaleX(-1) translateX(20px)';
+                    setTimeout(() => { avatarP2.style.transform = 'scaleX(-1) translateX(0)'; }, 150);
+                    p2Vida = Math.max(0, p2Vida - 10);
+                    document.getElementById('vida-p2').style.width = p2Vida + '%';
+                } else if (e.key === ' ') {
+                    p1Y = 80;
+                    atualizarPosicaoLutador();
+                    setTimeout(() => {
+                        p1Y = 0;
+                        atualizarPosicaoLutador();
+                    }, 400);
+                } else if (e.key === 'Control') {
+                    p1Agachado = true;
+                    atualizarPosicaoLutador();
+                } else if (e.key === 'Shift' || key === 'shift') {
+                    ativarFatalityManual();
+                }
+            }
+        }
+
+        function tratarSolucaoTecla(e) {
+            if (e.key === 'Control') {
+                p1Agachado = false;
+                atualizarPosicaoLutador();
+            }
+        }
+
+        function ativarFatalityManual() {
+            if (fatalityDisponivel) {
+                tocarSom('fatality');
+                let avatarP1 = document.getElementById('avatar-p1');
+                let avatarP2 = document.getElementById('avatar-p2');
+                
+                avatarP1.classList.add('fatality-ativo');
+                alert("FATALITY ATIVADO! O personagem brilhou e o adversário foi destruído!");
+                
+                p2Vida = 0;
+                document.getElementById('vida-p2').style.width = '0%';
+                avatarP2.style.opacity = '0.1';
+                
+                setTimeout(() => {
+                    avatarP1.classList.remove('fatality-ativo');
+                    avatarP2.style.opacity = '1';
+                    fatalityDisponivel = false;
+                }, 2000);
+            } else {
+                alert("Fatality Indisponível! Você precisa acertar uma pergunta no Flash Card primeiro para ganhar o direito ao Fatality.");
             }
         }
     </script>
