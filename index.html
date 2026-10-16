@@ -1409,6 +1409,14 @@ body{
 }
 
 
+/* Destaque de foco quando a navegação é feita pelo controle */
+.menu-btn.pad-focus,
+.char-hit.pad-focus{
+    outline:4px solid #ffe15a;
+    outline-offset:3px;
+    box-shadow:0 0 22px rgba(255,210,50,.9);
+}
+
 /* =====================================================
    RESPONSIVO
 ===================================================== */
@@ -4487,6 +4495,85 @@ function handleKeyUp(e){
 
 
 /* =====================================================
+   GAMEPAD — NAVEGAÇÃO PELO MENU E SELEÇÃO
+===================================================== */
+
+const uiPadPrevious = [{}, {}];
+let uiPadCursor = 0;
+let uiPadLastMove = 0;
+
+function gamepadUiLoop(){
+    try{
+        if(!running && navigator.getGamepads){
+            const pads = Array.from(navigator.getGamepads()).filter(Boolean).slice(0,2);
+            const pad = pads[0];
+
+            if(pad){
+                const now = {};
+                for(let b=0;b<pad.buttons.length;b++){
+                    now[b] = !!pad.buttons[b]?.pressed;
+                }
+                const prev = uiPadPrevious[0] || {};
+                const just = n => !!now[n] && !prev[n];
+                const axisX = Math.abs(pad.axes?.[0] || 0) > .55 ? Math.sign(pad.axes[0]) : 0;
+                const axisY = Math.abs(pad.axes?.[1] || 0) > .55 ? Math.sign(pad.axes[1]) : 0;
+                const left = just(14) || axisX < 0;
+                const right = just(15) || axisX > 0;
+                const up = just(12) || axisY < 0;
+                const down = just(13) || axisY > 0;
+                const confirm = just(0) || just(1 + 1); // A / botão inferior
+                const back = just(1) || just(9); // B / voltar ou menu
+
+                const menu = $("menu");
+                const selection = $("selection");
+                const rulesOpen = $("rules")?.style.display === "block";
+
+                if(rulesOpen && back){
+                    $("rules").style.display = "none";
+                }else if(menu?.classList.contains("active")){
+                    const buttons = Array.from(document.querySelectorAll("#menu .menu-btn"));
+                    if(buttons.length){
+                        if((up || down) && performance.now() - uiPadLastMove > 180){
+                            uiPadCursor = (uiPadCursor + (down ? 1 : -1) + buttons.length) % buttons.length;
+                            uiPadLastMove = performance.now();
+                            buttons.forEach((b,i)=>b.classList.toggle("pad-focus", i === uiPadCursor));
+                        }
+                        if(confirm && !rulesOpen){
+                            buttons[Math.min(uiPadCursor, buttons.length-1)]?.click();
+                        }
+                    }
+                }else if(selection?.classList.contains("active")){
+                    const buttons = Array.from(document.querySelectorAll("#select-grid .char-hit"));
+                    if(buttons.length){
+                        const current = Math.max(0, Math.min(buttons.length-1, uiPadCursor));
+                        if((left || right || up || down) && performance.now() - uiPadLastMove > 180){
+                            let next = current;
+                            if(left) next = current - 1;
+                            else if(right) next = current + 1;
+                            else if(up) next = current - 6;
+                            else if(down) next = current + 6;
+                            uiPadCursor = Math.max(0, Math.min(buttons.length-1, next));
+                            uiPadLastMove = performance.now();
+                            buttons.forEach((b,i)=>b.classList.toggle("pad-focus", i === uiPadCursor));
+                        }
+                        if(confirm && !selectionLocked){
+                            buttons[Math.min(uiPadCursor, buttons.length-1)]?.click();
+                        }
+                        if(back){
+                            showMenu();
+                        }
+                    }
+                }
+                uiPadPrevious[0] = now;
+            }
+        }
+    }catch(error){
+        console.warn("Controle: não foi possível ler a navegação do gamepad.", error);
+    }
+    requestAnimationFrame(gamepadUiLoop);
+}
+
+/* =====================================================
    GAMEPAD
 ===================================================== */
 
@@ -4783,6 +4870,8 @@ window.addEventListener(
     "gamepadconnected",
     ()=>{
         sound("click");
+        uiPadPrevious[0] = {};
+        uiPadPrevious[1] = {};
     }
 );
 
@@ -4792,6 +4881,7 @@ window.addEventListener(
 ===================================================== */
 
 buildSelection();
+requestAnimationFrame(gamepadUiLoop);
 
 </script>
 
