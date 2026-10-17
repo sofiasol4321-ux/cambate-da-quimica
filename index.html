@@ -1471,6 +1471,96 @@ body{
     opacity:.8;
 }
 
+
+/* REFINAMENTO VISUAL — CINEMÁTICO, SEM ALTERAR OS TEXTOS DO JOGO */
+:root{
+    --arena-gold:#e7bd62;
+    --arena-amber:#ff8a36;
+    --arena-ink:#070910;
+    --arena-panel:rgba(7,10,17,.88);
+}
+#game{
+    border:1px solid rgba(231,189,98,.42);
+    box-shadow:0 0 0 1px rgba(0,0,0,.8),0 24px 80px rgba(0,0,0,.7);
+}
+#menu::before,
+#selection::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    background:
+        linear-gradient(90deg,rgba(0,0,0,.55),transparent 35%,transparent 65%,rgba(0,0,0,.48)),
+        linear-gradient(0deg,rgba(0,0,0,.72),transparent 36%,rgba(0,0,0,.18));
+}
+#menu .menu-buttons{z-index:6;}
+.menu-btn{
+    min-width:160px;
+    border:1px solid rgba(255,220,150,.8);
+    border-radius:5px;
+    background:linear-gradient(180deg,rgba(45,24,18,.94),rgba(9,9,13,.96));
+    box-shadow:inset 0 1px rgba(255,255,255,.13),0 7px 18px rgba(0,0,0,.35);
+    letter-spacing:.7px;
+    text-transform:uppercase;
+    transition:transform .16s ease,background .16s ease,box-shadow .16s ease;
+}
+.menu-btn:hover,.menu-btn.pad-focus{
+    background:linear-gradient(180deg,rgba(126,65,22,.98),rgba(35,15,10,.98));
+    box-shadow:0 0 0 1px var(--arena-gold),0 0 22px rgba(255,145,42,.45);
+}
+#rules{
+    border-color:var(--arena-gold);
+    background:linear-gradient(145deg,rgba(16,20,29,.98),rgba(3,4,8,.98));
+    box-shadow:0 20px 65px rgba(0,0,0,.7),inset 0 0 25px rgba(255,150,40,.06);
+}
+#select-title{
+    letter-spacing:2px;
+    text-transform:uppercase;
+    text-shadow:0 3px 0 #000,0 0 22px rgba(255,134,36,.7);
+}
+.char-hit{
+    background:linear-gradient(145deg,rgba(255,255,255,.025),rgba(0,0,0,.16));
+    border:1px solid rgba(255,255,255,.08);
+}
+.char-hit.pad-focus{
+    outline:3px solid #ffe08a;
+    outline-offset:2px;
+    background:rgba(255,172,51,.13);
+    box-shadow:inset 0 0 28px rgba(255,156,36,.2),0 0 26px rgba(255,170,44,.45);
+}
+#select-info,#controls{
+    border:1px solid rgba(231,189,98,.45);
+    background:linear-gradient(180deg,rgba(8,10,16,.92),rgba(0,0,0,.82));
+    box-shadow:0 8px 28px rgba(0,0,0,.4);
+    backdrop-filter:blur(5px);
+}
+.hp{border-color:#e8c66d;box-shadow:0 0 18px rgba(255,165,55,.22);}
+.name{letter-spacing:1px;text-transform:uppercase;}
+#timer{color:#ffd56a;text-shadow:0 3px 0 #56180a,0 0 20px rgba(255,80,35,.65);}
+.fighter{
+    filter:contrast(1.08) saturate(1.08) drop-shadow(0 14px 12px rgba(0,0,0,.8));
+}
+#flash{
+    background:radial-gradient(ellipse at center,rgba(27,29,37,.94),rgba(0,0,0,.97));
+}
+#flash h2,#victory h1{
+    color:#ffd56a;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    text-shadow:0 3px 0 #411708,0 0 24px rgba(255,130,35,.4);
+}
+.flash-btn,#victory button{
+    border:1px solid rgba(255,222,153,.55);
+    box-shadow:0 5px 14px rgba(0,0,0,.35);
+}
+#pause{
+    background:rgba(0,0,0,.78);
+    color:#ffd56a;
+    letter-spacing:5px;
+    text-shadow:0 0 25px rgba(255,125,35,.6);
+}
+
 /* Destaque de foco quando a navegação é feita pelo controle */
 .menu-btn.pad-focus,
 .char-hit.pad-focus{
@@ -1516,7 +1606,7 @@ body{
         <h2 id="gamepad-prompt-title">MANETE DETECTADA</h2>
         <p>Seu controle foi conectado. Pressione o botão <strong>Y</strong> para ativar os comandos da manete.</p>
         <div class="gamepad-y" aria-label="Botão Y">Y</div>
-        <p class="gamepad-note">Em controles PlayStation, use o botão △ (Triângulo), que ocupa a mesma posição.</p>
+        <p class="gamepad-note">Na sua manete Xbox 360, o botão Y fica na parte superior direita dos quatro botões coloridos.</p>
     </div>
 </div>
 
@@ -2234,6 +2324,7 @@ let questionTimer = null;
 let audioCtx = null;
 
 let previousPad = [{},{}];
+let padMoveAt = [0,0];
 
 const MAX_HP = 360;
 const PUNCH_DAMAGE = 4;
@@ -4685,265 +4776,61 @@ function buttonPressed(
 
 function pollGamepads(){
 
-    if(
-        !running ||
-        !navigator.getGamepads ||
-        !padReady
-    ){
-
+    if(!running || !navigator.getGamepads || !padReady){
         return;
-
     }
 
-
-    const gps =
-        Array
-            .from(
-                navigator.getGamepads()
-            )
-            .filter(Boolean)
-            .slice(0,2);
-
-
-    /*
-       FLASH CARD NO GAMEPAD
-
-       A / X = correto
-       B / O = errado
-
-       No modo 1P:
-       controle 1 responde.
-
-       No modo 2P:
-       responde o controle do jogador
-       sorteado para a pergunta.
-    */
+    const gps = Array.from(navigator.getGamepads()).filter(Boolean).slice(0,2);
 
     if(flashOpen){
-
-        for(
-            let i=0;
-            i<gps.length;
-            i++
-        ){
-
-            const gp =
-                gps[i];
-
-
+        for(let i=0;i<gps.length;i++){
+            const gp = gps[i];
             const now = {};
+            for(let b=0;b<gp.buttons.length;b++) now[b] = buttonPressed(gp,b);
+            const prev = previousPad[i] || {};
+            const just = n => !!now[n] && !prev[n];
+            const allowedPlayer = mode === "1P" ? 1 : questionOwner;
 
-
-            for(
-                let b=0;
-                b<gp.buttons.length;
-                b++
-            ){
-
-                now[b] =
-                    buttonPressed(
-                        gp,
-                        b
-                    );
-
+            if(i+1 === allowedPlayer && !questionAnswered){
+                if(just(0)) answerFlash("correct");       // A
+                else if(just(1)) answerFlash("wrong");   // B
+                else if(just(2)) flipFlash();            // X
             }
-
-
-            const prev =
-                previousPad[i] || {};
-
-
-            const just =
-                n =>
-                    now[n] &&
-                    !prev[n];
-
-
-            const allowedPlayer =
-                mode === "1P"
-                ? 1
-                : questionOwner;
-
-
-            if(
-                i + 1 === allowedPlayer &&
-                !questionAnswered
-            ){
-
-                if(just(0)){
-
-                    answerFlash(
-                        "correct"
-                    );
-
-                }
-
-                else if(just(1)){
-
-                    answerFlash(
-                        "wrong"
-                    );
-
-                }
-
-            }
-
-
-            previousPad[i] =
-                now;
-
+            previousPad[i] = now;
         }
-
-
         return;
-
     }
 
+    if(paused) return;
 
-    if(paused){
-
-        return;
-
-    }
-
-
-    for(
-        let i=0;
-        i<gps.length;
-        i++
-    ){
-
-        const gp =
-            gps[i];
-
-
-        const axisX =
-            Math.abs(
-                gp.axes?.[0] || 0
-            ) > .35
-            ? gp.axes[0]
-            : 0;
-
-
-        if(axisX){
-
-            move(
-                i+1,
-                axisX > 0
-                ? 1
-                : -1
-            );
-
-        }
-
-
+    const nowTime = performance.now();
+    for(let i=0;i<gps.length;i++){
+        const gp = gps[i];
         const now = {};
+        for(let b=0;b<gp.buttons.length;b++) now[b] = buttonPressed(gp,b);
+        const prev = previousPad[i] || {};
+        const just = n => !!now[n] && !prev[n];
+        const player = i+1;
+        const axisX = Math.abs(gp.axes?.[0] || 0) > .35 ? gp.axes[0] : 0;
+        const dpadLeft = just(14);
+        const dpadRight = just(15);
 
-
-        const pressed =
-            n =>
-                buttonPressed(
-                    gp,
-                    n
-                );
-
-
-        for(
-            let b=0;
-            b<gp.buttons.length;
-            b++
-        ){
-
-            now[b] =
-                pressed(b);
-
+        // Analog stick moves continuously but with a controlled repeat rate.
+        if(nowTime - padMoveAt[i] > 95){
+            if(axisX < 0) { move(player,-1); padMoveAt[i] = nowTime; }
+            else if(axisX > 0) { move(player,1); padMoveAt[i] = nowTime; }
+            else if(dpadLeft) { move(player,-1); padMoveAt[i] = nowTime; }
+            else if(dpadRight) { move(player,1); padMoveAt[i] = nowTime; }
         }
 
+        if(just(0) || just(12)) jump(player);            // A / D-pad up
+        if(just(2)) punch(player);                        // X
+        if(just(3)) fatality(player);                     // Y
+        crouch(player, !!now[1] || !!now[13]);            // B / D-pad down, release to stand
 
-        const prev =
-            previousPad[i] || {};
-
-
-        const just =
-            n =>
-                now[n] &&
-                !prev[n];
-
-
-        if(axisX === 0){
-
-            if(just(14)){
-
-                move(
-                    i+1,
-                    -1
-                );
-
-            }
-
-
-            if(just(15)){
-
-                move(
-                    i+1,
-                    1
-                );
-
-            }
-
-        }
-
-
-        if(
-            just(12) ||
-            just(0)
-        ){
-
-            jump(
-                i+1
-            );
-
-        }
-
-
-        if(
-            just(13) ||
-            just(1)
-        ){
-
-            crouch(
-                i+1,
-                true
-            );
-
-        }
-
-
-        if(just(2)){
-
-            punch(
-                i+1
-            );
-
-        }
-
-
-        if(just(3)){
-
-            fatality(
-                i+1
-            );
-
-        }
-
-
-        previousPad[i] =
-            now;
-
+        previousPad[i] = now;
     }
-
 }
-
 
 /* =====================================================
    EVENTOS
@@ -4963,12 +4850,14 @@ window.addEventListener(
 
 window.addEventListener(
     "gamepadconnected",
-    ()=>{
+    (event)=>{
         padReady = false;
         padWasDetected = true;
         uiPadPrevious[0] = {};
         uiPadPrevious[1] = {};
+        previousPad = [{},{}];
         $("gamepad-prompt")?.classList.add("show");
+        console.info("Manete detectada:", event.gamepad?.id || "controle conectado", "mapeamento:", event.gamepad?.mapping || "não padronizado");
     }
 );
 
