@@ -1652,9 +1652,9 @@ body{
     <div class="gamepad-card">
         <div class="gamepad-kicker">Combate da Química · Sistema de controle</div>
         <h2 id="gamepad-prompt-title">MANETE DETECTADA</h2>
-        <p>Manete encontrada pelo navegador. Pressione o botão <strong>Y</strong> do Xbox 360 para ativar os comandos. Se não funcionar, clique nesta página e aperte Y novamente.</p>
-        <div class="gamepad-y" aria-label="Botão Y">Y</div>
-        <p class="gamepad-note">Na sua manete Xbox 360, o botão Y fica na parte superior direita dos quatro botões coloridos.</p>
+        <p>Manete encontrada! Aperte qualquer botão ou mova o direcional/analógico para ativar. Depois use o direcional para navegar e A para confirmar.</p>
+        <div class="gamepad-y" aria-label="Qualquer botão">A</div>
+        <p class="gamepad-note">Não precisa apertar um botão específico para ativar a manete.</p>
     </div>
 </div>
 
@@ -4760,18 +4760,25 @@ function gamepadUiLoop(){
             }
         }else{
             padWasDetected = true;
-            if(!padReady) showGamepadPrompt();
             const now = {};
-            for(let b=0;b<pad.buttons.length;b++){
-                now[b] = !!pad.buttons[b]?.pressed;
-            }
+            for(let b=0;b<pad.buttons.length;b++) now[b] = !!pad.buttons[b]?.pressed;
             const prev = uiPadPrevious[0] || {};
             const just = n => !!now[n] && !prev[n];
+            const axisXRaw = pad.axes?.[0] || 0;
+            const axisYRaw = pad.axes?.[1] || 0;
+            const axisX = Math.abs(axisXRaw) > .55 ? Math.sign(axisXRaw) : 0;
+            const axisY = Math.abs(axisYRaw) > .55 ? Math.sign(axisYRaw) : 0;
+            const left = just(14) || axisX < 0;
+            const right = just(15) || axisX > 0;
+            const up = just(12) || axisY < 0;
+            const down = just(13) || axisY > 0;
+            const anyButton = Object.keys(now).some(k => now[k] && !prev[k]);
+            const anyDirection = left || right || up || down;
 
-            // Em controles padrão: Y no Xbox e Triângulo no PlayStation = botão 3.
+            // Não exige um botão específico: qualquer botão, direcional ou analógico ativa a manete.
             if(!padReady){
-                prompt?.classList.add("show");
-                if(just(3)){
+                showGamepadPrompt();
+                if(anyButton || anyDirection){
                     padReady = true;
                     prompt?.classList.remove("show");
                     uiPadCursor = 0;
@@ -4783,15 +4790,8 @@ function gamepadUiLoop(){
             }
 
             if(!running){
-                const axisX = Math.abs(pad.axes?.[0] || 0) > .55 ? Math.sign(pad.axes[0]) : 0;
-                const axisY = Math.abs(pad.axes?.[1] || 0) > .55 ? Math.sign(pad.axes[1]) : 0;
-                const left = just(14) || axisX < 0;
-                const right = just(15) || axisX > 0;
-                const up = just(12) || axisY < 0;
-                const down = just(13) || axisY > 0;
-                const confirm = just(0) || just(3);
-                const back = just(1) || just(9);
-
+                const confirm = just(0) || just(1) || just(2) || just(3) || just(9) || just(10);
+                const back = just(1) || just(8) || just(9);
                 const menu = $("menu");
                 const selection = $("selection");
                 const rulesOpen = $("rules")?.style.display === "block";
@@ -4801,7 +4801,7 @@ function gamepadUiLoop(){
                 }else if(menu?.classList.contains("active")){
                     const buttons = Array.from(document.querySelectorAll("#menu .menu-btn"));
                     if(buttons.length){
-                        uiPadCursor = Math.min(uiPadCursor, buttons.length-1);
+                        uiPadCursor = Math.max(0, Math.min(buttons.length-1, uiPadCursor));
                         if((up || down) && performance.now() - uiPadLastMove > 180){
                             uiPadCursor = (uiPadCursor + (down ? 1 : -1) + buttons.length) % buttons.length;
                             uiPadLastMove = performance.now();
@@ -4813,7 +4813,7 @@ function gamepadUiLoop(){
                     const buttons = Array.from(document.querySelectorAll("#select-grid .char-hit"));
                     if(buttons.length){
                         uiPadCursor = Math.max(0, Math.min(buttons.length-1, uiPadCursor));
-                        if((left || right || up || down) && performance.now() - uiPadLastMove > 180){
+                        if(anyDirection && performance.now() - uiPadLastMove > 180){
                             let next = uiPadCursor;
                             if(left) next = uiPadCursor - 1;
                             else if(right) next = uiPadCursor + 1;
