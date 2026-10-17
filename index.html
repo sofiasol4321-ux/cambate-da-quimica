@@ -1561,6 +1561,54 @@ body{
     text-shadow:0 0 25px rgba(255,125,35,.6);
 }
 
+
+/* MOVIMENTOS CORPORAIS: golpes com deslocamento, sem molduras artificiais */
+#menu::before,#selection::before{display:none !important;}
+#game{border:0;box-shadow:none;}
+#fighter1,#fighter2{
+    background-color:transparent;
+    border:0;
+    border-radius:0;
+    box-shadow:none;
+    transform-origin:50% 85%;
+    will-change:transform,left,bottom,filter;
+}
+#fighter1{filter:drop-shadow(0 18px 14px rgba(0,0,0,.48));}
+#fighter2{filter:drop-shadow(0 18px 14px rgba(0,0,0,.48));}
+#fighter1.punch{animation:bodyPunch1 .28s ease-out !important;}
+#fighter2.punch{animation:bodyPunch2 .28s ease-out !important;}
+@keyframes bodyPunch1{
+  0%{transform:scaleX(1) translateX(0) rotate(0)}
+  35%{transform:scaleX(1) translateX(24px) rotate(-5deg) scale(1.035)}
+  65%{transform:scaleX(1) translateX(10px) rotate(2deg)}
+  100%{transform:scaleX(1) translateX(0) rotate(0)}
+}
+@keyframes bodyPunch2{
+  0%{transform:scaleX(-1) translateX(0) rotate(0)}
+  35%{transform:scaleX(-1) translateX(24px) rotate(-5deg) scale(1.035)}
+  65%{transform:scaleX(-1) translateX(10px) rotate(2deg)}
+  100%{transform:scaleX(-1) translateX(0) rotate(0)}
+}
+#fighter1.kick{animation:bodyKick1 .42s cubic-bezier(.2,.8,.2,1) !important;}
+#fighter2.kick{animation:bodyKick2 .42s cubic-bezier(.2,.8,.2,1) !important;}
+@keyframes bodyKick1{
+  0%{transform:scaleX(1) rotate(0) translateX(0)}
+  28%{transform:scaleX(1) rotate(-8deg) translateX(-5px) scale(1.04)}
+  58%{transform:scaleX(1) rotate(13deg) translateX(30px) scale(1.07, .96)}
+  76%{transform:scaleX(1) rotate(4deg) translateX(12px)}
+  100%{transform:scaleX(1) rotate(0) translateX(0)}
+}
+@keyframes bodyKick2{
+  0%{transform:scaleX(-1) rotate(0) translateX(0)}
+  28%{transform:scaleX(-1) rotate(-8deg) translateX(-5px) scale(1.04)}
+  58%{transform:scaleX(-1) rotate(13deg) translateX(30px) scale(1.07, .96)}
+  76%{transform:scaleX(-1) rotate(4deg) translateX(12px)}
+  100%{transform:scaleX(-1) rotate(0) translateX(0)}
+}
+.fighter.kick{filter:brightness(1.15) drop-shadow(0 0 20px rgba(255,154,61,.45)) !important;}
+.fighter.hit{filter:brightness(1.6) drop-shadow(0 0 16px rgba(255,225,150,.55)) !important;}
+#effects{pointer-events:none;}
+
 /* Destaque de foco quando a navegação é feita pelo controle */
 .menu-btn.pad-focus,
 .char-hit.pad-focus{
@@ -2017,7 +2065,7 @@ body{
 
     <div id="controls">
 
-        W/S mover • A soco • Espaço pular • Ctrl agachar • Shift Fatality • C/E responder • D virar carta
+        W/S mover • A soco • F chute • Espaço pular • Ctrl agachar • Shift Fatality • C/E responder • D virar carta • Manete Xbox: X soco, RB chute, A pular, B agachar, Y Fatality
 
     </div>
 
@@ -3983,6 +4031,30 @@ function punch(player){
 }
 
 
+
+/* CHUTE — golpe corporal para os dois jogadores */
+function kick(player){
+    if(!running || paused || flashOpen) return;
+    const self = player === 1 ? p1 : p2;
+    const enemy = player === 1 ? p2 : p1;
+    const attacker = $(player === 1 ? "fighter1" : "fighter2");
+    const target = $(player === 1 ? "fighter2" : "fighter1");
+    if(!canHit(self,enemy)) return;
+    sound("hit");
+    attacker.classList.remove("kick");
+    void attacker.offsetWidth;
+    attacker.classList.add("kick");
+    target.classList.add("hit");
+    spawnFx(enemy.x + 120, 350);
+    cinematicHit(target, 8);
+    enemy.hp = Math.max(0, enemy.hp - 8);
+    setTimeout(()=>{
+        attacker.classList.remove("kick");
+        target.classList.remove("hit");
+    },430);
+    updateHp();
+}
+
 /* =====================================================
    PULO
 ===================================================== */
@@ -4451,6 +4523,11 @@ function handleKeyDown(e){
     }
 
 
+    if(k.toLowerCase() === "f" && running && !flashOpen){
+        kick(1);
+        return;
+    }
+
     /* FLASH */
 
     if(flashOpen){
@@ -4824,8 +4901,9 @@ function pollGamepads(){
         }
 
         if(just(0) || just(12)) jump(player);            // A / D-pad up
-        if(just(2)) punch(player);                        // X
-        if(just(3)) fatality(player);                     // Y
+        if(just(2)) punch(player);                        // X = soco
+        if(just(5)) kick(player);                         // RB = chute
+        if(just(3)) fatality(player);                     // Y = Fatality
         crouch(player, !!now[1] || !!now[13]);            // B / D-pad down, release to stand
 
         previousPad[i] = now;
