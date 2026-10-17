@@ -1422,7 +1422,7 @@ body{
     background:rgba(3,7,18,.82);
     backdrop-filter:blur(7px);
 }
-#gamepad-prompt.show{display:flex;}
+#gamepad-prompt.show{display:flex !important; visibility:visible !important; opacity:1 !important;}
 .gamepad-card{
     width:min(560px,92%);
     padding:30px 34px;
@@ -1652,7 +1652,7 @@ body{
     <div class="gamepad-card">
         <div class="gamepad-kicker">Combate da Química · Sistema de controle</div>
         <h2 id="gamepad-prompt-title">MANETE DETECTADA</h2>
-        <p>Seu controle foi conectado. Pressione o botão <strong>Y</strong> para ativar os comandos da manete.</p>
+        <p>Manete encontrada pelo navegador. Pressione o botão <strong>Y</strong> do Xbox 360 para ativar os comandos. Se não funcionar, clique nesta página e aperte Y novamente.</p>
         <div class="gamepad-y" aria-label="Botão Y">Y</div>
         <p class="gamepad-note">Na sua manete Xbox 360, o botão Y fica na parte superior direita dos quatro botões coloridos.</p>
     </div>
@@ -4760,6 +4760,7 @@ function gamepadUiLoop(){
             }
         }else{
             padWasDetected = true;
+            if(!padReady) showGamepadPrompt();
             const now = {};
             for(let b=0;b<pad.buttons.length;b++){
                 now[b] = !!pad.buttons[b]?.pressed;
@@ -4926,18 +4927,35 @@ window.addEventListener(
 );
 
 
-window.addEventListener(
-    "gamepadconnected",
-    (event)=>{
-        padReady = false;
-        padWasDetected = true;
-        uiPadPrevious[0] = {};
-        uiPadPrevious[1] = {};
-        previousPad = [{},{}];
-        $("gamepad-prompt")?.classList.add("show");
-        console.info("Manete detectada:", event.gamepad?.id || "controle conectado", "mapeamento:", event.gamepad?.mapping || "não padronizado");
+function showGamepadPrompt(){
+    const prompt = $("gamepad-prompt");
+    if(prompt){
+        prompt.classList.add("show");
+        prompt.style.display = "flex";
     }
-);
+}
+
+window.addEventListener("gamepadconnected",(event)=>{
+    padReady = false;
+    padWasDetected = true;
+    uiPadPrevious[0] = {};
+    uiPadPrevious[1] = {};
+    previousPad = [{},{}];
+    showGamepadPrompt();
+    console.info("Manete detectada:",event.gamepad?.id || "controle conectado","mapeamento:",event.gamepad?.mapping || "não padronizado");
+});
+window.addEventListener("gamepaddisconnected",()=>{
+    padReady = false;
+    padWasDetected = false;
+    $("gamepad-prompt")?.classList.remove("show");
+    console.info("Manete desconectada.");
+});
+window.addEventListener("focus",()=>{
+    // Alguns controles Xbox só aparecem para o navegador depois que a janela volta ao foco.
+    if(navigator.getGamepads && Array.from(navigator.getGamepads()).some(Boolean)){
+        if(!padReady) showGamepadPrompt();
+    }
+});
 
 
 /* =====================================================
